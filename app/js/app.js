@@ -1,3 +1,3 @@
-import { renderHome } from "./views/home.js";
+import { navigate } from "./router.js";
 
-renderHome();
+navigate("home");

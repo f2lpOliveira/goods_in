@@ -1,4 +1,4 @@
-import { renderRecordForm } from "./form.js";
+import { navigate } from "../router.js";
 
 export function renderHome() {
   const appContent = document.getElementById("app-content");
@@ -26,6 +26,6 @@ export function renderHome() {
   const newRecordButton = document.getElementById("new-record-button");
 
   newRecordButton.addEventListener("click", () => {
-    renderRecordForm();
+    navigate("form");
   });
 }

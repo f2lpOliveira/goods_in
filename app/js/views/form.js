@@ -1,3 +1,4 @@
+import { navigate } from "../router.js";
 import { renderHome } from "./home.js";
 
 export function renderRecordForm() {
@@ -24,6 +25,6 @@ export function renderRecordForm() {
   const cancelButton = document.getElementById("cancel-button");
 
   cancelButton.addEventListener("click", () => {
-    renderHome();
+    navigate("home");
   });
 }
