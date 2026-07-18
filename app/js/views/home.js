@@ -1,27 +1,31 @@
+import { renderRecordForm } from "./form.js";
+
 export function renderHome() {
   const appContent = document.getElementById("app-content");
 
   appContent.innerHTML = `
-			<section class="home-view">
+        <section class="home-view">
 
-					<button id="new-record-button">
-							New Record
-					</button>
+            <button id="new-record-button">
+                New Record
+            </button>
 
-					<p>No records found.</p>
+            <p>No records found.</p>
 
-					<div class="actions">
+            <div class="actions">
 
-							<button>
-									Export
-							</button>
+                <button>Export</button>
 
-							<button>
-									Settings
-							</button>
+                <button>Settings</button>
 
-					</div>
+            </div>
 
-			</section>
-	`;
+        </section>
+    `;
+
+  const newRecordButton = document.getElementById("new-record-button");
+
+  newRecordButton.addEventListener("click", () => {
+    renderRecordForm();
+  });
 }
