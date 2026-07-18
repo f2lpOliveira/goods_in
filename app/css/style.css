@@ -13,3 +13,19 @@ body {
   color: white;
   padding: 16px;
 }
+.home-view button {
+  width: 100%;
+
+  padding: 12px;
+
+  margin-bottom: 12px;
+
+  cursor: pointer;
+}
+.actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 24px;
+}
