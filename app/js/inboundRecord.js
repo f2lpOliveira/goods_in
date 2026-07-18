@@ -1,23 +1,29 @@
-const inboundRecord = {
-  id: crypto.randomUUID(),
+export function createInboundRecord() {
+  const now = new Date().toISOString();
 
-  arrivalDate: "",
-  inboundReferenceNumber: "",
+  return {
+    id: crypto.randomUUID(),
 
-  productCode: "",
-  mixedPallet: false,
+    arrivalDate: "",
+    inboundReferenceNumber: "",
 
-  batchCode: "",
-  bbd: "",
+    productCode: "",
 
-  quantity: 0,
+    mixedPallet: false,
 
-  sequence: 1,
+    batchCode: "",
 
-  photos: [],
+    bbd: "",
 
-  exported: false,
+    quantity: 0,
 
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
+    sequence: 1,
+
+    photos: [],
+
+    exported: false,
+
+    createdAt: now,
+    updatedAt: now,
+  };
+}
