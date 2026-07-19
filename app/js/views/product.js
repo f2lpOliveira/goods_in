@@ -1,5 +1,8 @@
 import { getCurrentInbound } from "../state/currentInbound.js";
 import { createInboundItem } from "../models/inboundItem.js";
+import { addInbound } from "../state/inbounds.js";
+import { clearCurrentInbound } from "../state/currentInbound.js";
+import { navigate } from "../router.js";
 
 export function renderProductForm() {
   render();
@@ -16,6 +19,10 @@ function bindEvents() {
   const form = document.getElementById("product-form");
 
   form.addEventListener("submit", handleSubmit);
+
+  const finishButton = document.getElementById("finish-button");
+
+  finishButton.addEventListener("click", handleFinishInbound);
 }
 
 function handleSubmit(event) {
@@ -52,6 +59,16 @@ function handleSubmit(event) {
   bindEvents();
 
   document.getElementById("product-code").focus();
+}
+
+function handleFinishInbound() {
+  const inbound = getCurrentInbound();
+
+  addInbound(inbound);
+
+  clearCurrentInbound();
+
+  navigate("home");
 }
 
 function getProductTemplate() {
