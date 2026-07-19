@@ -30,7 +30,10 @@ function bindSaveButton() {
   form.addEventListener("submit", event => {
     event.preventDefault();
 
-    console.log("Save clicked");
+    const formData = new FormData(form);
+    const values = Object.fromEntries(formData);
+
+    console.log(values);
   });
 }
 
