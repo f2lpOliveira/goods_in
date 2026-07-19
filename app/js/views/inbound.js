@@ -1,5 +1,6 @@
 import { navigate } from "../router.js";
 import { createInbound } from "../models/inbound.js";
+import { setCurrentInbound } from "../state/currentInbound.js";
 
 export function renderInboundForm() {
   render();
@@ -27,7 +28,9 @@ function bindEvents() {
     inbound.arrivalDate = values.arrivalDate;
     inbound.inboundReferenceNumber = values.inboundReferenceNumber;
 
-    console.log(inbound);
+    setCurrentInbound(inbound);
+
+    console.log("Current inbound:", inbound);
   });
 
   cancelButton.addEventListener("click", () => {

@@ -1,6 +1,6 @@
 import { renderHome } from "./views/home.js";
-import { renderInboundForm } from "./views/inboundForm.js";
-import { renderRecordForm } from "./views/form.js";
+import { renderInboundForm } from "./views/inbound.js";
+import { renderRecordForm } from "./views/product.js";
 
 export const routes = {
   home: renderHome,
