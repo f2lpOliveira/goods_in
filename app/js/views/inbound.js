@@ -30,7 +30,7 @@ function bindEvents() {
 
     setCurrentInbound(inbound);
 
-    console.log("Current inbound:", inbound);
+    navigate("product");
   });
 
   cancelButton.addEventListener("click", () => {

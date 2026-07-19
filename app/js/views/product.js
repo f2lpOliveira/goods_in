@@ -1,8 +1,7 @@
-import { navigate } from "../router.js";
-import { createInboundRecord } from "../inboundRecord.js";
-import { addRecord } from "../repository.js";
+import { getCurrentInbound } from "../state/currentInbound.js";
+import { createInboundItem } from "../models/inboundItem.js";
 
-export function renderRecordForm() {
+export function renderProductForm() {
   render();
   bindEvents();
 }
@@ -10,80 +9,79 @@ export function renderRecordForm() {
 function render() {
   const appContent = document.getElementById("app-content");
 
-  appContent.innerHTML = getRecordFormTemplate();
+  appContent.innerHTML = getProductTemplate();
 }
 
 function bindEvents() {
-  bindCancelButton();
-  bindSaveButton();
+  const form = document.getElementById("product-form");
+
+  form.addEventListener("submit", handleSubmit);
 }
 
-function bindCancelButton() {
-  const cancelButton = document.getElementById("cancel-button");
+function handleSubmit(event) {
+  event.preventDefault();
 
-  cancelButton.addEventListener("click", () => {
-    navigate("home");
-  });
+  const form = event.target;
+
+  const formData = new FormData(form);
+
+  const values = Object.fromEntries(formData);
+
+  const inbound = getCurrentInbound();
+
+  const item = createInboundItem();
+
+  item.productCode = values.productCode;
+  item.mixedPallet = values.mixedPallet === "true";
+  item.batchCode = values.batchCode;
+  item.bbd = values.bbd;
+  item.quantity = Number(values.quantity);
+
+  item.sequence = inbound.nextSequence;
+
+  inbound.items.push(item);
+
+  inbound.nextSequence += 1;
+
+  console.log(inbound);
+
+  inbound.updatedAt = new Date().toISOString();
+
+  render();
+
+  bindEvents();
+
+  document.getElementById("product-code").focus();
 }
 
-function bindSaveButton() {
-  const form = document.getElementById("record-form");
+function getProductTemplate() {
+  const inbound = getCurrentInbound();
 
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-
-    const formData = new FormData(form);
-    const values = Object.fromEntries(formData);
-
-    const record = createInboundRecord();
-
-    record.arrivalDate = values.arrivalDate;
-
-    record.inboundReferenceNumber = values.inboundReferenceNumber;
-
-    record.productCode = values.productCode;
-
-    record.batchCode = values.batchCode;
-
-    record.bbd = values.bbd;
-
-    record.quantity = Number(values.quantity);
-
-    record.sequence = Number(values.sequence);
-
-    record.mixedPallet = values.mixedPallet === "true";
-
-    addRecord(record);
-
-    console.log("Record saved:", record);
-  });
-}
-
-function getRecordFormTemplate() {
   return `
-    <section class="record-form-view">
+    <section class="product-view">
 
-      <h2>New Record</h2>
+      <h2>New Product</h2>
 
-      <form id="record-form">
+      <div class="inbound-summary">
 
-        <label for="arrival-date">
-          Arrival Date
-        </label>
+        <p>
+          <strong>Inbound Reference:</strong>
+          ${inbound.inboundReferenceNumber}
+        </p>
 
-        <input
-          type="date"
-          id="arrival-date"
-          name="arrivalDate">
+        <p>
+          <strong>Arrival Date:</strong>
+          ${inbound.arrivalDate}
+        </p>
 
-        <label for="inbound-reference-number">
-          Inbound Reference Number
-        </label>
+        <p>
+          <strong>Next Sequence:</strong>
+          #${inbound.nextSequence}
+        </p>
 
-        <input
-          type="text"
-          id="inbound-reference-number"
-          name="inboundReferenceNumber">
+      </div>
+
+      <form id="product-form">
 
         <label for="product-code">
           Product Code
@@ -135,19 +133,9 @@ function getRecordFormTemplate() {
           name="quantity"
           min="0">
 
-        <label for="sequence">
-          Sequence
-        </label>
-
-        <input
-          type="number"
-          id="sequence"
-          name="sequence"
-          min="1">
-
         <button
-          id="photo-button"
-          type="button">
+          type="button"
+          id="photo-button">
 
           Add Photo
 
@@ -156,14 +144,16 @@ function getRecordFormTemplate() {
         <div class="form-actions">
 
           <button type="submit">
-            Save
+
+            Save & New
+
           </button>
 
           <button
-            id="cancel-button"
-            type="button">
+            type="button"
+            id="finish-button">
 
-            Cancel
+            Finish Inbound
 
           </button>
 
