@@ -1,6 +1,37 @@
 import { navigate } from "../router.js";
+import { getInbounds } from "../state/inbounds.js";
 
 export function renderHome() {
+  const inbounds = getInbounds();
+  const content =
+    inbounds.length === 0
+      ? `
+      <p>No inbounds yet.</p>
+    `
+      : `
+      ${inbounds
+        .map(
+          inbound => `
+       <div class="inbound-card">
+
+  			<h3>
+    			${inbound.inboundReferenceNumber}
+  			</h3>
+
+  			<p>
+    			${inbound.items.length} products
+  			</p>
+
+  			<button>
+    			Export
+  			</button>
+
+			</div>
+      `
+        )
+        .join("")}
+    `;
+
   const appContent = document.getElementById("app-content");
 
   appContent.innerHTML = `
@@ -10,7 +41,7 @@ export function renderHome() {
   							New Inbound
 						</button>
 
-            <p>No records found.</p>
+            ${content}
 
             <div class="actions">
 
