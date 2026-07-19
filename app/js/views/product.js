@@ -50,8 +50,6 @@ function handleSubmit(event) {
 
   inbound.nextSequence += 1;
 
-  console.log(inbound);
-
   inbound.updatedAt = new Date().toISOString();
 
   render();

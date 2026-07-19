@@ -1,6 +1,7 @@
 import { navigate } from "../router.js";
 import { getInbounds } from "../state/inbounds.js";
 import { prepareInboundExport } from "../services/exportService.js";
+import { generateCSV } from "../services/csvService.js";
 
 export function renderHome() {
   const inbounds = getInbounds();
@@ -52,14 +53,6 @@ export function renderHome() {
 
             ${content}
 
-            <div class="actions">
-
-                <button>Export</button>
-
-                <button>Settings</button>
-
-            </div>
-
         </section>
     `;
 
@@ -73,7 +66,9 @@ export function renderHome() {
         inbound => inbound.inboundReferenceNumber === inboundId
       );
 
-      console.log(prepareInboundExport(inbound));
+      const data = prepareInboundExport(inbound);
+
+      generateCSV(data, `Inbound_${inbound.inboundReferenceNumber}.csv`);
     });
   });
 
