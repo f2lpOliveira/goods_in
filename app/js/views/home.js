@@ -6,9 +6,9 @@ export function renderHome() {
   appContent.innerHTML = `
         <section class="home-view">
 
-            <button id="new-record-button">
-                New Record
-            </button>
+            <button id="new-inbound-button">
+  							New Inbound
+						</button>
 
             <p>No records found.</p>
 
@@ -23,9 +23,9 @@ export function renderHome() {
         </section>
     `;
 
-  const newRecordButton = document.getElementById("new-record-button");
+  const newInboundButton = document.getElementById("new-inbound-button");
 
-  newRecordButton.addEventListener("click", () => {
-    navigate("form");
+  newInboundButton.addEventListener("click", () => {
+    navigate("inboundForm");
   });
 }
