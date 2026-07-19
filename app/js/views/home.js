@@ -1,5 +1,6 @@
 import { navigate } from "../router.js";
 import { getInbounds } from "../state/inbounds.js";
+import { prepareInboundExport } from "../services/exportService.js";
 
 export function renderHome() {
   const inbounds = getInbounds();
@@ -26,9 +27,13 @@ export function renderHome() {
   				${formatDate(inbound.arrivalDate)}
 				</p>
 
-  			<button>
-    			Export
-  			</button>
+  			<button
+  				class="export-button"
+  				data-inbound-id="${inbound.inboundReferenceNumber}">
+
+  					Export
+
+				</button>
 
 			</div>
       `
@@ -57,6 +62,20 @@ export function renderHome() {
 
         </section>
     `;
+
+  const exportButtons = document.querySelectorAll(".export-button");
+
+  exportButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const inboundId = button.dataset.inboundId;
+
+      const inbound = inbounds.find(
+        inbound => inbound.inboundReferenceNumber === inboundId
+      );
+
+      console.log(prepareInboundExport(inbound));
+    });
+  });
 
   const newInboundButton = document.getElementById("new-inbound-button");
 
