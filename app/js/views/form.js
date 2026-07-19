@@ -1,4 +1,5 @@
 import { navigate } from "../router.js";
+import { createInboundRecord } from "../inboundRecord.js";
 
 export function renderRecordForm() {
   render();
@@ -33,7 +34,25 @@ function bindSaveButton() {
     const formData = new FormData(form);
     const values = Object.fromEntries(formData);
 
-    console.log(values);
+    const record = createInboundRecord();
+
+    record.arrivalDate = values.arrivalDate;
+
+    record.inboundReferenceNumber = values.inboundReferenceNumber;
+
+    record.productCode = values.productCode;
+
+    record.batchCode = values.batchCode;
+
+    record.bbd = values.bbd;
+
+    record.quantity = Number(values.quantity);
+
+    record.sequence = Number(values.sequence);
+
+    record.mixedPallet = values.mixedPallet === "true";
+
+    console.log(record);
   });
 }
 
