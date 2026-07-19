@@ -22,6 +22,10 @@ export function renderHome() {
     			${inbound.items.length} products
   			</p>
 
+				<p>
+  				${formatDate(inbound.arrivalDate)}
+				</p>
+
   			<button>
     			Export
   			</button>
@@ -59,4 +63,10 @@ export function renderHome() {
   newInboundButton.addEventListener("click", () => {
     navigate("inboundForm");
   });
+}
+
+function formatDate(date) {
+  const [year, month, day] = date.split("-");
+
+  return `${day}-${month}-${year}`;
 }
