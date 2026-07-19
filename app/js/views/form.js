@@ -1,5 +1,6 @@
 import { navigate } from "../router.js";
 import { createInboundRecord } from "../inboundRecord.js";
+import { addRecord } from "../repository.js";
 
 export function renderRecordForm() {
   render();
@@ -52,7 +53,9 @@ function bindSaveButton() {
 
     record.mixedPallet = values.mixedPallet === "true";
 
-    console.log(record);
+    addRecord(record);
+
+    console.log("Record saved:", record);
   });
 }
 
