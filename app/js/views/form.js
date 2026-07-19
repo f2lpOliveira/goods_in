@@ -12,10 +12,25 @@ function render() {
 }
 
 function bindEvents() {
+  bindCancelButton();
+  bindSaveButton();
+}
+
+function bindCancelButton() {
   const cancelButton = document.getElementById("cancel-button");
 
   cancelButton.addEventListener("click", () => {
     navigate("home");
+  });
+}
+
+function bindSaveButton() {
+  const form = document.getElementById("record-form");
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+
+    console.log("Save clicked");
   });
 }
 
