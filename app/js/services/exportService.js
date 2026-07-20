@@ -1,7 +1,9 @@
+import { formatArrivalDate, formatBBD } from "../utils/dateUtils.js";
+
 export function prepareInboundExport(inbound) {
   return inbound.items.map(item => {
     return {
-      ArrivalDate: inbound.arrivalDate,
+      ArrivalDate: formatArrivalDate(inbound.arrivalDate),
       InboundReferenceNumb: inbound.inboundReferenceNumber,
       InboundReference: inbound.inboundReferenceNumber,
 
@@ -11,7 +13,7 @@ export function prepareInboundExport(inbound) {
 
       BatchCode: item.batchCode,
 
-      BBD: item.bbd,
+      BBD: formatBBD(item.bbd),
 
       Quantity: item.quantity,
 
