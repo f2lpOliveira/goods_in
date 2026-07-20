@@ -11,3 +11,7 @@ export function addInbound(inbound) {
 export function clearInbounds() {
   inbounds = [];
 }
+
+export function setInbounds(newInbounds) {
+  inbounds = newInbounds;
+}

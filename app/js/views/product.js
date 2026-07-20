@@ -3,6 +3,8 @@ import { createInboundItem } from "../models/inboundItem.js";
 import { addInbound } from "../state/inbounds.js";
 import { clearCurrentInbound } from "../state/currentInbound.js";
 import { navigate } from "../router.js";
+import { getInbounds } from "../state/inbounds.js";
+import { saveInbounds } from "../repository/inboundRepository.js";
 
 export function renderProductForm() {
   render();
@@ -63,6 +65,8 @@ function handleFinishInbound() {
   const inbound = getCurrentInbound();
 
   addInbound(inbound);
+
+  saveInbounds(getInbounds());
 
   clearCurrentInbound();
 
