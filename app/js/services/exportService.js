@@ -5,7 +5,7 @@ export function prepareInboundExport(inbound) {
       InboundReferenceNumb: inbound.inboundReferenceNumber,
       InboundReference: inbound.inboundReferenceNumber,
 
-      ProductCode: item.productCode,
+      "Product code": item.productCode,
 
       MixedPallet: item.mixedPallet ? "Yes" : "No",
 
