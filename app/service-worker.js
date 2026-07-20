@@ -1,0 +1,47 @@
+const CACHE_NAME = "warehouse-inbound-v1";
+
+const FILES_TO_CACHE = [
+  "./",
+  "./index.html",
+
+  "./css/style.css",
+
+  "./js/app.js",
+  "./js/router.js",
+  "./js/storage.js",
+  "./js/repository.js",
+
+  "./js/models/inbound.js",
+  "./js/models/inboundItem.js",
+
+  "./js/state/currentInbound.js",
+  "./js/state/inbounds.js",
+
+  "./js/repository/inboundRepository.js",
+
+  "./js/services/csvService.js",
+  "./js/services/exportService.js",
+
+  "./js/export/excelExporter.js",
+
+  "./js/utils/dateUtils.js",
+
+  "./js/views/home.js",
+  "./js/views/inbound.js",
+  "./js/views/product.js",
+  "./js/views/inboundItems.js",
+];
+
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+  );
+});
+
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches
+      .match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
