@@ -22,7 +22,7 @@ const FILES_TO_CACHE = [
   "./js/services/csvService.js",
   "./js/services/exportService.js",
 
-  "./js/export/excelExporter.js",
+  "./js/export/csvExporter.js",
 
   "./js/utils/dateUtils.js",
 
@@ -34,7 +34,20 @@ const FILES_TO_CACHE = [
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+    caches.open(CACHE_NAME).then(cache =>
+      (async () => {
+        const cache = await caches.open(CACHE_NAME);
+
+        for (const file of FILES_TO_CACHE) {
+          try {
+            await cache.add(file);
+            console.log("Cached:", file);
+          } catch (error) {
+            console.error("Failed:", file, error);
+          }
+        }
+      })()
+    )
   );
 });
 
