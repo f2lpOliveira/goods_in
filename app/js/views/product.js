@@ -42,6 +42,7 @@ function handleSubmit(event) {
   item.mixedPallet = values.mixedPallet === "true";
   item.batchCode = values.batchCode;
   item.bbd = values.bbd;
+  inbound.lastBBD = values.bbd;
   item.quantity = Number(values.quantity);
 
   item.sequence = inbound.nextSequence;
@@ -144,7 +145,8 @@ function getProductTemplate() {
         <input
           type="date"
           id="bbd"
-          name="bbd">
+          name="bbd"
+					value="${inbound.lastBBD}">
 
         <label for="quantity">
           Quantity

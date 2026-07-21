@@ -15,6 +15,8 @@ export function createInboundRecord() {
 
     bbd: "",
 
+    lastBBD: "",
+
     quantity: 0,
 
     sequence: 1,
