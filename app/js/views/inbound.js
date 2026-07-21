@@ -15,10 +15,16 @@ function render() {
 
 function bindEvents() {
   const form = document.getElementById("inbound-form");
+  const createButton = document.getElementById("create-inbound-button");
   const cancelButton = document.getElementById("cancel-button");
 
-  form.addEventListener("submit", event => {
-    event.preventDefault();
+  createButton.addEventListener("click", () => {
+    console.log("Button clicked");
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
 
     const formData = new FormData(form);
     const values = Object.fromEntries(formData);
@@ -54,7 +60,7 @@ function getInboundFormTemplate() {
           type="date"
           id="arrival-date"
           name="arrivalDate"
-          required>
+        >
 
         <label for="inbound-reference-number">
           Inbound Reference Number
@@ -64,13 +70,15 @@ function getInboundFormTemplate() {
           type="text"
           id="inbound-reference-number"
           name="inboundReferenceNumber"
-          required>
+        >
 
         <div class="form-actions">
 
-          <button type="submit">
-            Create Inbound
-          </button>
+          <button
+  type="button"
+  id="create-inbound-button">
+  Create Inbound
+</button>
 
           <button
             type="button"
