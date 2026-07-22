@@ -114,7 +114,8 @@ function getProductTemplate() {
         <input
           type="text"
           id="product-code"
-          name="productCode">
+          name="productCode"
+					list="product-code-list">
 
         <label for="mixed-pallet">
           Mixed Pallet
@@ -136,7 +137,8 @@ function getProductTemplate() {
         <input
           type="text"
           id="batch-code"
-          name="batchCode">
+          name="batchCode"
+					list="batch-code-list">
 
         <label for="bbd">
           BBD
@@ -183,9 +185,32 @@ function getProductTemplate() {
           </button>
 
         </div>
+				<datalist id="product-code-list">
+  				${getProductCodeOptions()}
+				</datalist>
+
+				<datalist id="batch-code-list">
+  				${getBatchCodeOptions()}
+				</datalist>
 
       </form>
 
     </section>
   `;
+}
+
+function getProductCodeOptions() {
+  const inbound = getCurrentInbound();
+
+  const codes = [...new Set(inbound.items.map(item => item.productCode))];
+
+  return codes.map(code => `<option value="${code}">`).join("");
+}
+
+function getBatchCodeOptions() {
+  const inbound = getCurrentInbound();
+
+  const batches = [...new Set(inbound.items.map(item => item.batchCode))];
+
+  return batches.map(batch => `<option value="${batch}">`).join("");
 }
