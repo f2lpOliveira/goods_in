@@ -1,11 +1,11 @@
-import { save, load } from "../storage.js";
-
-const STORAGE_KEY = "warehouse-inbounds";
+const STORAGE_KEY = "inbounds";
 
 export function saveInbounds(inbounds) {
-  save(STORAGE_KEY, inbounds);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(inbounds));
 }
 
 export function loadInbounds() {
-  return load(STORAGE_KEY) ?? [];
+  const data = localStorage.getItem(STORAGE_KEY);
+
+  return data ? JSON.parse(data) : [];
 }
