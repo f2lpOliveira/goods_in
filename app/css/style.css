@@ -41,3 +41,20 @@ body {
   padding: 10px;
   font-size: 1rem;
 }
+.autocomplete-list {
+  border: 1px solid #ccc;
+
+  max-height: 150px;
+
+  overflow-y: auto;
+
+  background: white;
+}
+.autocomplete-option {
+  padding: 8px;
+
+  cursor: pointer;
+}
+.autocomplete-option:hover {
+  background: #f2f2f2;
+}

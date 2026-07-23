@@ -19,8 +19,6 @@ function bindEvents() {
   const cancelButton = document.getElementById("cancel-button");
 
   createButton.addEventListener("click", () => {
-    console.log("Button clicked");
-
     if (!form.checkValidity()) {
       form.reportValidity();
       return;

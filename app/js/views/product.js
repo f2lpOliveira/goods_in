@@ -3,6 +3,7 @@ import { createInboundItem } from "../models/inboundItem.js";
 import { addInbound } from "../state/inbounds.js";
 import { clearCurrentInbound } from "../state/currentInbound.js";
 import { navigate } from "../router.js";
+import { attachAutocomplete } from "../components/autocomplete.js";
 
 export function renderProductForm() {
   render();
@@ -23,6 +24,16 @@ function bindEvents() {
   const finishButton = document.getElementById("finish-button");
 
   finishButton.addEventListener("click", handleFinishInbound);
+
+  attachAutocomplete({
+    input: document.getElementById("product-code"),
+    suggestions: getProductSuggestions(),
+  });
+
+  attachAutocomplete({
+    input: document.getElementById("batch-code"),
+    suggestions: getBatchSuggestions(),
+  });
 }
 
 function handleSubmit(event) {
@@ -114,8 +125,7 @@ function getProductTemplate() {
         <input
           type="text"
           id="product-code"
-          name="productCode"
-					list="product-code-list">
+          name="productCode">
 
         <label for="mixed-pallet">
           Mixed Pallet
@@ -137,8 +147,7 @@ function getProductTemplate() {
         <input
           type="text"
           id="batch-code"
-          name="batchCode"
-					list="batch-code-list">
+          name="batchCode">
 
         <label for="bbd">
           BBD
@@ -213,4 +222,16 @@ function getBatchCodeOptions() {
   const batches = [...new Set(inbound.items.map(item => item.batchCode))];
 
   return batches.map(batch => `<option value="${batch}">`).join("");
+}
+
+function getProductSuggestions() {
+  const inbound = getCurrentInbound();
+
+  return [...new Set(inbound.items.map(item => item.productCode))];
+}
+
+function getBatchSuggestions() {
+  const inbound = getCurrentInbound();
+
+  return [...new Set(inbound.items.map(item => item.batchCode))];
 }
