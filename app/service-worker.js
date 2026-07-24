@@ -30,6 +30,8 @@ const FILES_TO_CACHE = [
   "./js/views/inbound.js",
   "./js/views/product.js",
   "./js/views/inboundItems.js",
+
+  "./libs/xlsx.full.min.js",
 ];
 
 self.addEventListener("install", event => {
