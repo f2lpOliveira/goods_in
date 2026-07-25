@@ -1,10 +1,10 @@
-export function formatArrivalDate(dateString) {
+export function toISODate(dateString) {
   const date = new Date(dateString);
 
   return date.toISOString();
 }
 
-export function formatBBD(dateString) {
+export function toBBDFormat(dateString) {
   const date = new Date(dateString);
 
   const months = [
@@ -27,6 +27,12 @@ export function formatBBD(dateString) {
   const month = months[date.getMonth()];
 
   const year = String(date.getFullYear()).slice(-2);
+
+  return `${day}-${month}-${year}`;
+}
+
+export function toDisplayDate(date) {
+  const [year, month, day] = date.split("-");
 
   return `${day}-${month}-${year}`;
 }

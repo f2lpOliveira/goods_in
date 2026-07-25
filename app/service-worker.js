@@ -8,7 +8,6 @@ const FILES_TO_CACHE = [
 
   "./js/app.js",
   "./js/router.js",
-  "./js/storage.js",
 
   "./js/models/inbound.js",
   "./js/models/inboundItem.js",
@@ -28,7 +27,6 @@ const FILES_TO_CACHE = [
   "./js/views/home.js",
   "./js/views/inbound.js",
   "./js/views/product.js",
-  "./js/views/inboundItems.js",
 
   "./libs/xlsx.full.min.js",
 ];
