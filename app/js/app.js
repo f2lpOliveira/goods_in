@@ -1,8 +1,14 @@
-import { navigate } from "./router.js";
+import { navigate, ROUTES } from "./router.js";
 
-navigate("home");
+navigate(ROUTES.HOME);
 
-if ("serviceWorker" in navigator) {
+registerServiceWorker();
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
+
   window.addEventListener("load", async () => {
     try {
       const registration = await navigator.serviceWorker.register(

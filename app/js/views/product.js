@@ -2,7 +2,7 @@ import { getCurrentInbound } from "../state/currentInbound.js";
 import { createInboundItem } from "../models/inboundItem.js";
 import { addInbound } from "../state/inbounds.js";
 import { clearCurrentInbound } from "../state/currentInbound.js";
-import { navigate } from "../router.js";
+import { navigate, ROUTES } from "../router.js";
 import { attachAutocomplete } from "../components/autocomplete.js";
 
 export function renderProductForm() {
@@ -86,7 +86,7 @@ function handleFinishInbound() {
 
   clearCurrentInbound();
 
-  navigate("home");
+  navigate(ROUTES.HOME);
 }
 
 function getProductTemplate() {

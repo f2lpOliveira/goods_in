@@ -1,4 +1,4 @@
-import { navigate } from "../router.js";
+import { navigate, ROUTES } from "../router.js";
 import { getInbounds } from "../state/inbounds.js";
 import { prepareInboundExport } from "../services/exportService.js";
 import { generateCSV } from "../services/csvService.js";
@@ -75,7 +75,7 @@ export function renderHome() {
   const newInboundButton = document.getElementById("new-inbound-button");
 
   newInboundButton.addEventListener("click", () => {
-    navigate("inboundForm");
+    navigate(ROUTES.INBOUND_FORM);
   });
 }
 

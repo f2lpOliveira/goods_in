@@ -9,7 +9,6 @@ const FILES_TO_CACHE = [
   "./js/app.js",
   "./js/router.js",
   "./js/storage.js",
-  "./js/repository.js",
 
   "./js/models/inbound.js",
   "./js/models/inboundItem.js",

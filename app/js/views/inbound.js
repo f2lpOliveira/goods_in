@@ -1,4 +1,4 @@
-import { navigate } from "../router.js";
+import { navigate, ROUTES } from "../router.js";
 import { createInbound } from "../models/inbound.js";
 import { setCurrentInbound } from "../state/currentInbound.js";
 
@@ -34,11 +34,11 @@ function bindEvents() {
 
     setCurrentInbound(inbound);
 
-    navigate("product");
+    navigate(ROUTES.PRODUCT);
   });
 
   cancelButton.addEventListener("click", () => {
-    navigate("home");
+    navigate(ROUTES.HOME);
   });
 }
 
