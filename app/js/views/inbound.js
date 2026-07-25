@@ -13,35 +13,6 @@ function render() {
   appContent.innerHTML = getInboundFormTemplate();
 }
 
-function bindEvents() {
-  const form = document.getElementById("inbound-form");
-  const createButton = document.getElementById("create-inbound-button");
-  const cancelButton = document.getElementById("cancel-button");
-
-  createButton.addEventListener("click", () => {
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
-
-    const formData = new FormData(form);
-    const values = Object.fromEntries(formData);
-
-    const inbound = createInbound();
-
-    inbound.arrivalDate = values.arrivalDate;
-    inbound.inboundReferenceNumber = values.inboundReferenceNumber;
-
-    setCurrentInbound(inbound);
-
-    navigate(ROUTES.PRODUCT);
-  });
-
-  cancelButton.addEventListener("click", () => {
-    navigate(ROUTES.HOME);
-  });
-}
-
 function getInboundFormTemplate() {
   return `
     <section class="inbound-form-view">
@@ -92,4 +63,36 @@ function getInboundFormTemplate() {
 
     </section>
   `;
+}
+
+function bindEvents() {
+  const form = document.getElementById("inbound-form");
+  const createButton = document.getElementById("create-inbound-button");
+  const cancelButton = document.getElementById("cancel-button");
+
+  createButton.addEventListener("click", () => {
+    handleCreateInbound(form);
+  });
+
+  cancelButton.addEventListener("click", handleCancel);
+}
+
+function handleCreateInbound(form) {
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  const formData = new FormData(form);
+  const values = Object.fromEntries(formData);
+
+  const inbound = createInbound(values);
+
+  setCurrentInbound(inbound);
+
+  navigate(ROUTES.PRODUCT);
+}
+
+function handleCancel() {
+  navigate(ROUTES.HOME);
 }
