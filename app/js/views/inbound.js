@@ -4,6 +4,7 @@ import {
   getCurrentInbound,
   setCurrentInbound,
   updateCurrentInbound,
+  clearCurrentInbound,
 } from "../state/currentInbound.js";
 
 export function renderInboundForm() {
@@ -109,6 +110,16 @@ function handleCreateInbound(form) {
 }
 
 function handleCancel() {
+  const confirmed = confirm(
+    "Cancel this inbound?\n\nAll progress will be permanently lost."
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  clearCurrentInbound();
+
   navigate(ROUTES.HOME);
 }
 
