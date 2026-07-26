@@ -55,7 +55,8 @@ function getProductTemplate() {
         <input
           type="text"
           id="product-code"
-          name="productCode">
+          name="productCode"
+					required>
 
         <label for="mixed-pallet">
           Mixed Pallet
@@ -77,7 +78,8 @@ function getProductTemplate() {
         <input
           type="text"
           id="batch-code"
-          name="batchCode">
+          name="batchCode"
+					required>
 
         <label for="bbd">
           BBD
@@ -97,7 +99,8 @@ function getProductTemplate() {
           type="number"
           id="quantity"
           name="quantity"
-          min="0">
+          min="1"
+					required>
 
         <button type="button" id="photo-button">
 
@@ -168,6 +171,11 @@ function handleSubmit(event) {
   event.preventDefault();
 
   const form = event.target;
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
 
   const values = getFormValues(form);
 
