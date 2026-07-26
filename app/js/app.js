@@ -1,5 +1,4 @@
 import { navigate, ROUTES } from "./router.js";
-import { loadDraft } from "./repository/inboundDraftRepository.js";
 import { getCurrentInbound } from "./state/currentInbound.js";
 
 restoreApplicationState();
@@ -9,13 +8,6 @@ function restoreApplicationState() {
 
   if (currentInbound) {
     navigate(ROUTES.PRODUCT);
-    return;
-  }
-
-  const draft = loadDraft();
-
-  if (draft) {
-    navigate(ROUTES.INBOUND_FORM);
     return;
   }
 

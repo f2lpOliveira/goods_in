@@ -1,11 +1,10 @@
 import { navigate, ROUTES } from "../router.js";
 import { createInbound } from "../models/inbound.js";
-import { setCurrentInbound } from "../state/currentInbound.js";
 import {
-  saveDraft,
-  loadDraft,
-  clearDraft,
-} from "../repository/inboundDraftRepository.js";
+  getCurrentInbound,
+  setCurrentInbound,
+  updateCurrentInbound,
+} from "../state/currentInbound.js";
 
 export function renderInboundForm() {
   render();
@@ -16,7 +15,7 @@ function render() {
   const appContent = document.getElementById("app-content");
 
   appContent.innerHTML = getInboundFormTemplate();
-  restoreDraft();
+  restoreCurrentInbound();
 }
 
 function getInboundFormTemplate() {
@@ -73,7 +72,6 @@ function getInboundFormTemplate() {
 
 function bindEvents() {
   const form = document.getElementById("inbound-form");
-  form.addEventListener("input", saveCurrentDraft);
 
   const createButton = document.getElementById("create-inbound-button");
   const cancelButton = document.getElementById("cancel-button");
@@ -94,37 +92,35 @@ function handleCreateInbound(form) {
   const formData = new FormData(form);
   const values = Object.fromEntries(formData);
 
-  const inbound = createInbound(values);
+  const currentInbound = getCurrentInbound();
 
-  setCurrentInbound(inbound);
-  clearDraft();
+  if (currentInbound) {
+    currentInbound.arrivalDate = values.arrivalDate;
+    currentInbound.inboundReferenceNumber = values.inboundReferenceNumber;
+
+    updateCurrentInbound(currentInbound);
+  } else {
+    const inbound = createInbound(values);
+
+    setCurrentInbound(inbound);
+  }
 
   navigate(ROUTES.PRODUCT);
 }
 
 function handleCancel() {
   navigate(ROUTES.HOME);
-  clearDraft();
 }
 
-function restoreDraft() {
-  const draft = loadDraft();
+function restoreCurrentInbound() {
+  const currentInbound = getCurrentInbound();
 
-  if (!draft) {
+  if (!currentInbound) {
     return;
   }
 
-  document.getElementById("arrival-date").value = draft.arrivalDate ?? "";
+  document.getElementById("arrival-date").value = currentInbound.arrivalDate;
 
   document.getElementById("inbound-reference-number").value =
-    draft.inboundReferenceNumber ?? "";
-}
-
-function saveCurrentDraft() {
-  saveDraft({
-    arrivalDate: document.getElementById("arrival-date").value,
-
-    inboundReferenceNumber: document.getElementById("inbound-reference-number")
-      .value,
-  });
+    currentInbound.inboundReferenceNumber;
 }

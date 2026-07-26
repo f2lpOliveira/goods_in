@@ -99,9 +99,7 @@ function getProductTemplate() {
           name="quantity"
           min="0">
 
-        <button
-          type="button"
-          id="photo-button">
+        <button type="button" id="photo-button">
 
           Add Photo
 
@@ -115,9 +113,13 @@ function getProductTemplate() {
 
           </button>
 
-          <button
-            type="button"
-            id="finish-button">
+					<button type="button" id="back-button">
+
+    				Back
+
+					</button>
+
+          <button type="button" id="finish-button">
 
             Finish Inbound
 
@@ -143,7 +145,11 @@ function bindEvents() {
 
   form.addEventListener("submit", handleSubmit);
 
+  const backButton = document.getElementById("back-button");
+
   const finishButton = document.getElementById("finish-button");
+
+  backButton.addEventListener("click", handleBack);
 
   finishButton.addEventListener("click", handleFinishInbound);
 
@@ -198,6 +204,10 @@ function refreshForm() {
   bindEvents();
 
   document.getElementById("product-code").focus();
+}
+
+function handleBack() {
+  navigate(ROUTES.INBOUND_FORM);
 }
 
 function handleFinishInbound() {
