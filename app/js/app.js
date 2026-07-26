@@ -1,6 +1,26 @@
 import { navigate, ROUTES } from "./router.js";
+import { loadDraft } from "./repository/inboundDraftRepository.js";
+import { getCurrentInbound } from "./state/currentInbound.js";
 
-navigate(ROUTES.HOME);
+restoreApplicationState();
+
+function restoreApplicationState() {
+  const currentInbound = getCurrentInbound();
+
+  if (currentInbound) {
+    navigate(ROUTES.PRODUCT);
+    return;
+  }
+
+  const draft = loadDraft();
+
+  if (draft) {
+    navigate(ROUTES.INBOUND_FORM);
+    return;
+  }
+
+  navigate(ROUTES.HOME);
+}
 
 registerServiceWorker();
 

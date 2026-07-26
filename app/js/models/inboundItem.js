@@ -1,15 +1,18 @@
-export function createInboundItem() {
+export function createInboundItem(values = {}, sequence = 1) {
   return {
     id: crypto.randomUUID(),
 
-    productCode: "",
-    mixedPallet: false,
+    productCode: values.productCode ?? "",
 
-    batchCode: "",
-    bbd: "",
+    mixedPallet: values.mixedPallet === "true",
 
-    quantity: 0,
-    sequence: 0,
+    batchCode: values.batchCode ?? "",
+
+    bbd: values.bbd ?? "",
+
+    quantity: Number(values.quantity ?? 0),
+
+    sequence,
 
     photos: [],
   };

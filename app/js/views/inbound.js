@@ -1,6 +1,11 @@
 import { navigate, ROUTES } from "../router.js";
 import { createInbound } from "../models/inbound.js";
 import { setCurrentInbound } from "../state/currentInbound.js";
+import {
+  saveDraft,
+  loadDraft,
+  clearDraft,
+} from "../repository/inboundDraftRepository.js";
 
 export function renderInboundForm() {
   render();
@@ -11,6 +16,7 @@ function render() {
   const appContent = document.getElementById("app-content");
 
   appContent.innerHTML = getInboundFormTemplate();
+  restoreDraft();
 }
 
 function getInboundFormTemplate() {
@@ -67,6 +73,8 @@ function getInboundFormTemplate() {
 
 function bindEvents() {
   const form = document.getElementById("inbound-form");
+  form.addEventListener("input", saveCurrentDraft);
+
   const createButton = document.getElementById("create-inbound-button");
   const cancelButton = document.getElementById("cancel-button");
 
@@ -89,10 +97,34 @@ function handleCreateInbound(form) {
   const inbound = createInbound(values);
 
   setCurrentInbound(inbound);
+  clearDraft();
 
   navigate(ROUTES.PRODUCT);
 }
 
 function handleCancel() {
   navigate(ROUTES.HOME);
+  clearDraft();
+}
+
+function restoreDraft() {
+  const draft = loadDraft();
+
+  if (!draft) {
+    return;
+  }
+
+  document.getElementById("arrival-date").value = draft.arrivalDate ?? "";
+
+  document.getElementById("inbound-reference-number").value =
+    draft.inboundReferenceNumber ?? "";
+}
+
+function saveCurrentDraft() {
+  saveDraft({
+    arrivalDate: document.getElementById("arrival-date").value,
+
+    inboundReferenceNumber: document.getElementById("inbound-reference-number")
+      .value,
+  });
 }

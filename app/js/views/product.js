@@ -1,9 +1,12 @@
-import { getCurrentInbound } from "../state/currentInbound.js";
 import { createInboundItem } from "../models/inboundItem.js";
 import { addInbound } from "../state/inbounds.js";
 import { clearCurrentInbound } from "../state/currentInbound.js";
 import { navigate, ROUTES } from "../router.js";
 import { attachAutocomplete } from "../components/autocomplete.js";
+import {
+  getCurrentInbound,
+  updateCurrentInbound,
+} from "../state/currentInbound.js";
 
 export function renderProductForm() {
   render();
@@ -14,79 +17,6 @@ function render() {
   const appContent = document.getElementById("app-content");
 
   appContent.innerHTML = getProductTemplate();
-}
-
-function bindEvents() {
-  const form = document.getElementById("product-form");
-
-  form.addEventListener("submit", handleSubmit);
-
-  const finishButton = document.getElementById("finish-button");
-
-  finishButton.addEventListener("click", handleFinishInbound);
-
-  attachAutocomplete({
-    input: document.getElementById("product-code"),
-    suggestions: getProductSuggestions(),
-  });
-
-  attachAutocomplete({
-    input: document.getElementById("batch-code"),
-    suggestions: getBatchSuggestions(),
-  });
-}
-
-function handleSubmit(event) {
-  event.preventDefault();
-
-  const form = event.target;
-
-  const formData = new FormData(form);
-
-  const values = Object.fromEntries(formData);
-
-  const inbound = getCurrentInbound();
-
-  const item = createInboundItem();
-
-  item.productCode = values.productCode;
-  item.mixedPallet = values.mixedPallet === "true";
-  item.batchCode = values.batchCode;
-  item.bbd = values.bbd;
-  inbound.lastBBD = values.bbd;
-  item.quantity = Number(values.quantity);
-
-  item.sequence = inbound.nextSequence;
-
-  inbound.items.push(item);
-
-  inbound.nextSequence += 1;
-
-  inbound.updatedAt = new Date().toISOString();
-
-  render();
-
-  bindEvents();
-
-  document.getElementById("product-code").focus();
-}
-
-function handleFinishInbound() {
-  const confirmed = confirm(
-    "Finish this inbound?\n\nYou won't be able to add more products."
-  );
-
-  if (!confirmed) {
-    return;
-  }
-
-  const inbound = getCurrentInbound();
-
-  addInbound(inbound);
-
-  clearCurrentInbound();
-
-  navigate(ROUTES.HOME);
 }
 
 function getProductTemplate() {
@@ -195,11 +125,11 @@ function getProductTemplate() {
 
         </div>
 				<datalist id="product-code-list">
-  				${getProductCodeOptions()}
+  				${renderOptions(getUniqueValues("productCode"))}
 				</datalist>
 
 				<datalist id="batch-code-list">
-  				${getBatchCodeOptions()}
+  				${renderOptions(getUniqueValues("batchCode"))}
 				</datalist>
 
       </form>
@@ -208,30 +138,92 @@ function getProductTemplate() {
   `;
 }
 
-function getProductCodeOptions() {
-  const inbound = getCurrentInbound();
+function bindEvents() {
+  const form = document.getElementById("product-form");
 
-  const codes = [...new Set(inbound.items.map(item => item.productCode))];
+  form.addEventListener("submit", handleSubmit);
 
-  return codes.map(code => `<option value="${code}">`).join("");
+  const finishButton = document.getElementById("finish-button");
+
+  finishButton.addEventListener("click", handleFinishInbound);
+
+  attachAutocomplete({
+    input: document.getElementById("product-code"),
+    suggestions: getUniqueValues("productCode"),
+  });
+
+  attachAutocomplete({
+    input: document.getElementById("batch-code"),
+    suggestions: getUniqueValues("batchCode"),
+  });
 }
 
-function getBatchCodeOptions() {
-  const inbound = getCurrentInbound();
+function handleSubmit(event) {
+  event.preventDefault();
 
-  const batches = [...new Set(inbound.items.map(item => item.batchCode))];
+  const form = event.target;
 
-  return batches.map(batch => `<option value="${batch}">`).join("");
+  const values = getFormValues(form);
+
+  saveProduct(values);
+
+  refreshForm();
 }
 
-function getProductSuggestions() {
-  const inbound = getCurrentInbound();
+function getFormValues(form) {
+  const formData = new FormData(form);
 
-  return [...new Set(inbound.items.map(item => item.productCode))];
+  return Object.fromEntries(formData);
 }
 
-function getBatchSuggestions() {
+function saveProduct(values) {
   const inbound = getCurrentInbound();
 
-  return [...new Set(inbound.items.map(item => item.batchCode))];
+  const item = createInboundItem(values, inbound.nextSequence);
+
+  inbound.lastBBD = values.bbd;
+
+  inbound.items.push(item);
+
+  inbound.nextSequence += 1;
+
+  inbound.updatedAt = new Date().toISOString();
+
+  updateCurrentInbound(inbound);
+}
+
+function refreshForm() {
+  render();
+
+  bindEvents();
+
+  document.getElementById("product-code").focus();
+}
+
+function handleFinishInbound() {
+  const confirmed = confirm(
+    "Finish this inbound?\n\nYou won't be able to add more products."
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  const inbound = getCurrentInbound();
+
+  addInbound(inbound);
+
+  clearCurrentInbound();
+
+  navigate(ROUTES.HOME);
+}
+
+function getUniqueValues(field) {
+  const inbound = getCurrentInbound();
+
+  return [...new Set(inbound.items.map(item => item[field]))];
+}
+
+function renderOptions(values) {
+  return values.map(value => `<option value="${value}">`).join("");
 }
