@@ -89,7 +89,7 @@ function getProductTemplate() {
           type="date"
           id="bbd"
           name="bbd"
-					value="${inbound.lastBBD}">
+					value="${inbound.lastBBD ?? ""}"
 
         <label for="quantity">
           Quantity
@@ -195,7 +195,7 @@ function saveProduct(values) {
 
   const item = createInboundItem(values, inbound.nextSequence);
 
-  inbound.lastBBD = values.bbd;
+  inbound.lastBBD = values.bbd || "";
 
   inbound.items.push(item);
 
