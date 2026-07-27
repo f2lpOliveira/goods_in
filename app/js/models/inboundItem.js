@@ -1,6 +1,8 @@
+import { generateId } from "../utils/idUtils.js";
+
 export function createInboundItem(values = {}, sequence = 1) {
   return {
-    id: crypto.randomUUID(),
+    id: generateId(),
 
     productCode: values.productCode ?? "",
 

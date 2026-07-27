@@ -1,8 +1,10 @@
+import { generateId } from "../utils/idUtils.js";
+
 export function createInbound(values = {}) {
   const now = new Date().toISOString();
 
   return {
-    id: crypto.randomUUID(),
+    id: generateId(),
 
     arrivalDate: values.arrivalDate ?? "",
 
