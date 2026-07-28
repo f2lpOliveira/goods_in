@@ -7,23 +7,24 @@
   <body>
     <script type="module">
       import {
-        saveProducts,
-        loadProducts,
-        clearProducts,
-      } from "../js/core/catalog/productRepository.js";
+        saveProduct,
+        findByGTIN,
+        clearCatalog,
+      } from "../js/core/catalog/productCatalog.js";
 
-      saveProducts([
-        {
-          gtin: "07630100807501",
-          productCode: "7090.50",
-        },
-      ]);
+      import { createProduct } from "../js/core/catalog/product.js";
 
-      console.log(loadProducts());
+      clearCatalog();
 
-      clearProducts();
+      const product = createProduct({
+        gtin: "07630100807501",
 
-      console.log(loadProducts());
+        productCode: "7090.50",
+      });
+
+      saveProduct(product);
+
+      console.log(findByGTIN("07630100807501"));
     </script>
   </body>
 </html>
