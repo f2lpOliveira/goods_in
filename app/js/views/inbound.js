@@ -78,7 +78,7 @@ function bindEvents() {
   const cancelButton = document.getElementById("cancel-button");
 
   createButton.addEventListener("click", () => {
-    handleCreateInbound(form);
+    handleCreateButton(form);
   });
 
   cancelButton.addEventListener("click", handleCancel);
@@ -134,4 +134,17 @@ function restoreCurrentInbound() {
 
   document.getElementById("inbound-reference-number").value =
     currentInbound.inboundReferenceNumber;
+}
+
+function handleCreateButton(form) {
+  if (hasInboundInProgress()) {
+    navigate(ROUTES.PRODUCT);
+    return;
+  }
+
+  handleCreateInbound(form);
+}
+
+function hasInboundInProgress() {
+  return getCurrentInbound() !== null;
 }
