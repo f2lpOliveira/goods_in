@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Barcode Test</title>
+  </head>
+  <body>
+    <script type="module">
+      import { detectBarcodeFormat } from "../js/core/barcode/detectBarcodeFormat.js";
+
+      console.log(
+        detectBarcodeFormat("02076301008075011126052715270731106147714901")
+      );
+
+      console.log(detectBarcodeFormat("123456"));
+    </script>
+  </body>
+</html>
