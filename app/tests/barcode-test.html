@@ -6,11 +6,24 @@
   </head>
   <body>
     <script type="module">
-      import { parseBarcode } from "../js/core/barcode/parserFactory.js";
+      import {
+        saveProducts,
+        loadProducts,
+        clearProducts,
+      } from "../js/core/catalog/productRepository.js";
 
-      console.log(parseBarcode("02076301008075011126052715270731106147714901"));
+      saveProducts([
+        {
+          gtin: "07630100807501",
+          productCode: "7090.50",
+        },
+      ]);
 
-      console.log(parseBarcode("123456"));
+      console.log(loadProducts());
+
+      clearProducts();
+
+      console.log(loadProducts());
     </script>
   </body>
 </html>
