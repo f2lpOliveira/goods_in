@@ -22,6 +22,16 @@ export function saveProduct(product) {
   saveProducts(products);
 }
 
+export function registerProduct(product) {
+  const products = loadProducts();
+
+  products.push(product);
+
+  saveProducts(products);
+
+  return product;
+}
+
 export function clearCatalog() {
   clearProducts();
 }
