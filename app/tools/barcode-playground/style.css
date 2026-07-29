@@ -35,3 +35,23 @@ pre {
 
   overflow: auto;
 }
+
+.field {
+  margin-bottom: 20px;
+
+  padding-bottom: 10px;
+
+  border-bottom: 1px solid #ddd;
+}
+
+.field strong {
+  display: block;
+
+  margin-bottom: 6px;
+}
+
+.field p {
+  margin: 0;
+
+  font-size: 18px;
+}

@@ -1,11 +1,16 @@
 import { parseBarcode } from "../../js/core/barcode/parserFactory.js";
 import { findByGTIN } from "../../js/core/catalog/productCatalog.js";
 
+const status = document.getElementById("status");
+const gtin = document.getElementById("gtin");
+const productCode = document.getElementById("product-code");
+const batch = document.getElementById("batch");
+const productionDate = document.getElementById("production-date");
+const bestBefore = document.getElementById("best-before");
+const rawBarcode = document.getElementById("raw-barcode");
+
 const barcodeInput = document.getElementById("barcode-input");
-
 const parseButton = document.getElementById("parse-button");
-
-const result = document.getElementById("result");
 
 parseButton.addEventListener("click", handleParseBarcode);
 
@@ -13,7 +18,7 @@ function handleParseBarcode() {
   const barcode = barcodeInput.value.trim();
 
   if (!barcode) {
-    result.textContent = "Please enter a barcode.";
+    status.textContent = "⚠️ Please enter a barcode.";
 
     return;
   }
@@ -22,13 +27,17 @@ function handleParseBarcode() {
 
   const product = findByGTIN(parsed.gtin);
 
-  const output = {
-    ...parsed,
+  status.textContent = product ? "🟢 Product Found" : "🔴 Unknown Product";
 
-    productCode: product?.productCode ?? null,
+  gtin.textContent = parsed.gtin ?? "—";
 
-    catalogStatus: product ? "FOUND" : "NOT FOUND",
-  };
+  productCode.textContent = product?.productCode ?? "—";
 
-  result.textContent = JSON.stringify(output, null, 2);
+  batch.textContent = parsed.batch ?? "—";
+
+  productionDate.textContent = parsed.productionDate ?? "—";
+
+  bestBefore.textContent = parsed.bestBefore ?? "—";
+
+  rawBarcode.textContent = barcode;
 }

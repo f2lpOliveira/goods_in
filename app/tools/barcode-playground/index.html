@@ -22,14 +22,44 @@
 
       <hr />
 
-      <h2>Result</h2>
+      <section id="result-panel">
+        <h2>Result</h2>
 
-      <pre id="result">
+        <div class="field">
+          <strong>Status</strong>
+          <p id="status">Waiting...</p>
+        </div>
 
-No barcode parsed.
+        <div class="field">
+          <strong>GTIN</strong>
+          <p id="gtin">—</p>
+        </div>
 
-        </pre
-      >
+        <div class="field">
+          <strong>Product Code</strong>
+          <p id="product-code">—</p>
+        </div>
+
+        <div class="field">
+          <strong>Batch</strong>
+          <p id="batch">—</p>
+        </div>
+
+        <div class="field">
+          <strong>Production Date</strong>
+          <p id="production-date">—</p>
+        </div>
+
+        <div class="field">
+          <strong>Best Before</strong>
+          <p id="best-before">—</p>
+        </div>
+
+        <div class="field">
+          <strong>Raw Barcode</strong>
+          <p id="raw-barcode">—</p>
+        </div>
+      </section>
     </main>
 
     <script type="module" src="./barcode-playground.js"></script>
