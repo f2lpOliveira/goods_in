@@ -7,6 +7,11 @@ import {
   getCurrentInbound,
   updateCurrentInbound,
 } from "../state/currentInbound.js";
+import { parseBarcode } from "../core/barcode/parserFactory.js";
+import { findByGTIN, registerProduct } from "../core/catalog/productCatalog.js";
+import { createProduct } from "../core/catalog/product.js";
+
+let barcodeTimer = null;
 
 export function renderProductForm() {
   render();
@@ -48,6 +53,19 @@ function getProductTemplate() {
 
       <form id="product-form">
 
+			<label for="barcode-input">
+  				Barcode
+			</label>
+
+				<input
+				  type="text"
+				  id="barcode-input"
+				  name="barcode"
+				  autocomplete="off"
+				  inputmode="none"
+				  autofocus
+				>
+
         <label for="product-code">
           Product Code
         </label>
@@ -58,9 +76,27 @@ function getProductTemplate() {
           name="productCode"
 					required>
 
+				<label for="product-description">
+  				Description
+				</label>
+
+				<input
+				  type="text"
+				  id="product-description"
+				  name="description">
+
         <label for="mixed-pallet">
           Mixed Pallet
         </label>
+
+				<label for="production-date">
+  				Production Date
+				</label>
+
+				<input
+				  type="date"
+				  id="production-date"
+				  name="productionDate">
 
         <select
           id="mixed-pallet"
@@ -156,6 +192,10 @@ function bindEvents() {
 
   finishButton.addEventListener("click", handleFinishInbound);
 
+  const barcodeInput = document.getElementById("barcode-input");
+
+  barcodeInput.addEventListener("input", handleBarcodeInput);
+
   attachAutocomplete({
     input: document.getElementById("product-code"),
     suggestions: getUniqueValues("productCode"),
@@ -165,6 +205,75 @@ function bindEvents() {
     input: document.getElementById("batch-code"),
     suggestions: getUniqueValues("batchCode"),
   });
+}
+
+function handleBarcodeInput(event) {
+  const barcode = event.target.value.trim();
+
+  if (!barcode) {
+    return;
+  }
+
+  clearTimeout(barcodeTimer);
+
+  barcodeTimer = setTimeout(() => {
+    processBarcode(barcode);
+  }, 100);
+}
+
+function processBarcode(barcode) {
+  let parsed;
+
+  try {
+    parsed = parseBarcode(barcode);
+  } catch (error) {
+    console.error("Barcode parsing failed:", error);
+    return;
+  }
+
+  const product = findByGTIN(parsed.gtin);
+
+  if (product) {
+    fillKnownProduct(parsed, product);
+    return;
+  }
+
+  prepareNewProduct(parsed);
+}
+
+function fillKnownProduct(parsed, product) {
+  document.getElementById("product-code").value = product.productCode ?? "";
+
+  document.getElementById("product-description").value =
+    product.description ?? "";
+
+  document.getElementById("batch-code").value = parsed.batch ?? "";
+
+  document.getElementById("production-date").value =
+    parsed.productionDate ?? "";
+
+  document.getElementById("bbd").value = parsed.bestBefore ?? "";
+
+  document.getElementById("barcode-input").value = parsed.gtin ?? "";
+
+  document.getElementById("quantity").focus();
+}
+
+function prepareNewProduct(parsed) {
+  document.getElementById("product-code").value = "";
+
+  document.getElementById("product-description").value = "";
+
+  document.getElementById("batch-code").value = parsed.batch ?? "";
+
+  document.getElementById("production-date").value =
+    parsed.productionDate ?? "";
+
+  document.getElementById("bbd").value = parsed.bestBefore ?? "";
+
+  document.getElementById("barcode-input").value = parsed.gtin ?? "";
+
+  document.getElementById("product-code").focus();
 }
 
 function handleSubmit(event) {
@@ -187,11 +296,27 @@ function handleSubmit(event) {
 function getFormValues(form) {
   const formData = new FormData(form);
 
-  return Object.fromEntries(formData);
+  const values = Object.fromEntries(formData);
+
+  values.gtin = document.getElementById("barcode-input").value.trim();
+
+  return values;
 }
 
 function saveProduct(values) {
   const inbound = getCurrentInbound();
+
+  const existingProduct = values.gtin ? findByGTIN(values.gtin) : null;
+
+  if (!existingProduct && values.gtin && values.productCode) {
+    const product = createProduct({
+      gtin: values.gtin,
+      productCode: values.productCode,
+      description: values.description ?? "",
+    });
+
+    registerProduct(product);
+  }
 
   const item = createInboundItem(values, inbound.nextSequence);
 
@@ -211,7 +336,7 @@ function refreshForm() {
 
   bindEvents();
 
-  document.getElementById("product-code").focus();
+  document.getElementById("barcode-input").focus();
 }
 
 function handleBack() {
