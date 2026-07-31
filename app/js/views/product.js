@@ -256,7 +256,29 @@ function fillKnownProduct(parsed, product) {
 
   document.getElementById("barcode-input").value = parsed.gtin ?? "";
 
+  lockBarcodeFields();
+
   document.getElementById("quantity").focus();
+}
+
+function lockBarcodeFields() {
+  document.getElementById("barcode-input").readOnly = true;
+
+  document.getElementById("batch-code").readOnly = true;
+
+  document.getElementById("bbd").readOnly = true;
+
+  document.getElementById("production-date").readOnly = true;
+
+  document.getElementById("product-code").readOnly = true;
+
+  document.getElementById("product-description").readOnly = true;
+}
+
+function unlockNewProductFields() {
+  document.getElementById("product-code").readOnly = false;
+
+  document.getElementById("product-description").readOnly = false;
 }
 
 function prepareNewProduct(parsed) {
@@ -272,6 +294,10 @@ function prepareNewProduct(parsed) {
   document.getElementById("bbd").value = parsed.bestBefore ?? "";
 
   document.getElementById("barcode-input").value = parsed.gtin ?? "";
+
+  lockBarcodeFields();
+
+  unlockNewProductFields();
 
   document.getElementById("product-code").focus();
 }
@@ -307,6 +333,11 @@ function saveProduct(values) {
   const inbound = getCurrentInbound();
 
   const existingProduct = values.gtin ? findByGTIN(values.gtin) : null;
+
+  if (existingProduct) {
+    values.productCode = existingProduct.productCode;
+    values.description = existingProduct.description;
+  }
 
   if (!existingProduct && values.gtin && values.productCode) {
     const product = createProduct({
