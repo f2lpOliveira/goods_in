@@ -10,16 +10,27 @@ export function renderHome() {
   const appContent = document.getElementById("app-content");
 
   appContent.innerHTML = `
-    <section class="home-view">
+  <section class="home-view">
 
-      <button id="new-inbound-button">
-        New Inbound
-      </button>
+    <header>
+      <h2>Goods In</h2>
+      <p>Inbound Register</p>
+    </header>
+
+    <button id="new-inbound-button">
+      New Inbound
+    </button>
+
+    <hr />
+
+    <section>
+      <h3>Completed Inbounds</h3>
 
       ${renderInboundList(inbounds)}
-
     </section>
-  `;
+
+  </section>
+`;
 
   bindExportButtons(inbounds);
   bindNewInboundButton();
@@ -35,20 +46,25 @@ function renderInboundList(inbounds) {
 
 function renderInboundCard(inbound) {
   return `
-    <div class="inbound-card">
+  <article class="inbound-card">
 
-      <h3>
+    <header>
+      <h4>
         ${inbound.inboundReferenceNumber}
-      </h3>
+      </h4>
+    </header>
 
-      <p>
-        ${inbound.items.length} products
-      </p>
+    <p>
+      <strong>Products:</strong>
+      ${inbound.items.length}
+    </p>
 
-      <p>
-        ${toDisplayDate(inbound.arrivalDate)}
-      </p>
+    <p>
+      <strong>Arrival:</strong>
+      ${toDisplayDate(inbound.arrivalDate)}
+    </p>
 
+    <footer>
       <button
         class="export-button"
         data-inbound-id="${inbound.inboundReferenceNumber}">
@@ -56,9 +72,10 @@ function renderInboundCard(inbound) {
         Export
 
       </button>
+    </footer>
 
-    </div>
-  `;
+  </article>
+`;
 }
 
 function bindExportButtons(inbounds) {

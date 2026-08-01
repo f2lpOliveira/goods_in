@@ -2,7 +2,6 @@ import { createInboundItem } from "../models/inboundItem.js";
 import { addInbound } from "../state/inbounds.js";
 import { clearCurrentInbound } from "../state/currentInbound.js";
 import { navigate, ROUTES } from "../router.js";
-import { attachAutocomplete } from "../components/autocomplete.js";
 import {
   getCurrentInbound,
   updateCurrentInbound,
@@ -75,6 +74,7 @@ function getProductTemplate() {
           type="text"
           id="product-code"
           name="productCode"
+					readonly
 					required>
 
 				<label for="product-description">
@@ -84,20 +84,13 @@ function getProductTemplate() {
 				<input
 				  type="text"
 				  id="product-description"
-				  name="description">
+				  name="description"
+					readonly
+					required>
 
 				<label for="mixed-pallet">
           Mixed Pallet
         </label>
-
-				<label for="production-date">
-  				Production Date
-				</label>
-
-				<input
-				  type="date"
-				  id="production-date"
-				  name="productionDate">
 
         <select
           id="mixed-pallet"
@@ -116,6 +109,7 @@ function getProductTemplate() {
           type="text"
           id="batch-code"
           name="batchCode"
+					readonly
 					required>
 
         <label for="bbd">
@@ -126,7 +120,9 @@ function getProductTemplate() {
           type="date"
           id="bbd"
           name="bbd"
+					readonly
 					value="${inbound.lastBBD ?? ""}"
+				>
 
 				<label for="complete-layers">
   				Complete Layers
@@ -165,13 +161,7 @@ function getProductTemplate() {
 					readonly
           min="1"
 					required>
-
-        <button type="button" id="photo-button">
-
-          Add Photo
-
-        </button>
-
+        
         <div class="form-actions">
 
           <button type="submit">
@@ -180,12 +170,6 @@ function getProductTemplate() {
 
           </button>
 
-					<button type="button" id="back-button">
-
-    				Back
-
-					</button>
-
           <button type="button" id="finish-button">
 
             Finish Inbound
@@ -193,14 +177,6 @@ function getProductTemplate() {
           </button>
 
         </div>
-				<datalist id="product-code-list">
-  				${renderOptions(getUniqueValues("productCode"))}
-				</datalist>
-
-				<datalist id="batch-code-list">
-  				${renderOptions(getUniqueValues("batchCode"))}
-				</datalist>
-
       </form>
 
     </section>
@@ -212,11 +188,7 @@ function bindEvents() {
 
   form.addEventListener("submit", handleSubmit);
 
-  const backButton = document.getElementById("back-button");
-
   const finishButton = document.getElementById("finish-button");
-
-  backButton.addEventListener("click", handleBack);
 
   finishButton.addEventListener("click", handleFinishInbound);
 
@@ -231,16 +203,6 @@ function bindEvents() {
   completeLayersInput.addEventListener("input", calculateQuantity);
 
   partialLayerCasesInput.addEventListener("input", calculateQuantity);
-
-  attachAutocomplete({
-    input: document.getElementById("product-code"),
-    suggestions: getUniqueValues("productCode"),
-  });
-
-  attachAutocomplete({
-    input: document.getElementById("batch-code"),
-    suggestions: getUniqueValues("batchCode"),
-  });
 }
 
 function calculateQuantity() {
@@ -298,13 +260,7 @@ function processBarcode(barcode) {
 function fillKnownProduct(parsed, product) {
   document.getElementById("product-code").value = product.productCode ?? "";
 
-  document.getElementById("product-description").value =
-    product.description ?? "";
-
   document.getElementById("batch-code").value = parsed.batch ?? "";
-
-  document.getElementById("production-date").value =
-    parsed.productionDate ?? "";
 
   document.getElementById("bbd").value = parsed.bestBefore ?? "";
 
@@ -321,8 +277,6 @@ function lockBarcodeFields() {
   document.getElementById("batch-code").readOnly = true;
 
   document.getElementById("bbd").readOnly = true;
-
-  document.getElementById("production-date").readOnly = true;
 
   document.getElementById("product-code").readOnly = true;
 
@@ -341,9 +295,6 @@ function prepareNewProduct(parsed) {
   document.getElementById("product-description").value = "";
 
   document.getElementById("batch-code").value = parsed.batch ?? "";
-
-  document.getElementById("production-date").value =
-    parsed.productionDate ?? "";
 
   document.getElementById("bbd").value = parsed.bestBefore ?? "";
 
@@ -424,10 +375,6 @@ function refreshForm() {
   document.getElementById("barcode-input").focus();
 }
 
-function handleBack() {
-  navigate(ROUTES.INBOUND_FORM);
-}
-
 function handleFinishInbound() {
   const confirmed = confirm(
     "Finish this inbound?\n\nYou won't be able to add more products."
@@ -444,14 +391,4 @@ function handleFinishInbound() {
   clearCurrentInbound();
 
   navigate(ROUTES.HOME);
-}
-
-function getUniqueValues(field) {
-  const inbound = getCurrentInbound();
-
-  return [...new Set(inbound.items.map(item => item[field]))];
-}
-
-function renderOptions(values) {
-  return values.map(value => `<option value="${value}">`).join("");
 }
