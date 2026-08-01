@@ -10,6 +10,7 @@ import {
 import { parseBarcode } from "../core/barcode/parserFactory.js";
 import { findByGTIN, registerProduct } from "../core/catalog/productCatalog.js";
 import { createProduct } from "../core/catalog/product.js";
+import { getCasesPerLayer } from "../core/catalog/product.js";
 
 let barcodeTimer = null;
 
@@ -85,7 +86,7 @@ function getProductTemplate() {
 				  id="product-description"
 				  name="description">
 
-        <label for="mixed-pallet">
+				<label for="mixed-pallet">
           Mixed Pallet
         </label>
 
@@ -127,6 +128,32 @@ function getProductTemplate() {
           name="bbd"
 					value="${inbound.lastBBD ?? ""}"
 
+				<label for="complete-layers">
+  				Complete Layers
+				</label>
+
+				<input
+				  type="number"
+				  id="complete-layers"
+				  name="completeLayers"
+				  min="0"
+				  value="0"
+				  required
+				>
+
+				<label for="partial-layer-cases">
+				  Partial Layer Cases
+				</label>
+
+				<input
+				  type="number"
+				  id="partial-layer-cases"
+				  name="partialLayerCases"
+				  min="0"
+				  value="0"
+				  required
+				>
+
         <label for="quantity">
           Quantity
         </label>
@@ -135,6 +162,7 @@ function getProductTemplate() {
           type="number"
           id="quantity"
           name="quantity"
+					readonly
           min="1"
 					required>
 
@@ -196,6 +224,14 @@ function bindEvents() {
 
   barcodeInput.addEventListener("input", handleBarcodeInput);
 
+  const completeLayersInput = document.getElementById("complete-layers");
+
+  const partialLayerCasesInput = document.getElementById("partial-layer-cases");
+
+  completeLayersInput.addEventListener("input", calculateQuantity);
+
+  partialLayerCasesInput.addEventListener("input", calculateQuantity);
+
   attachAutocomplete({
     input: document.getElementById("product-code"),
     suggestions: getUniqueValues("productCode"),
@@ -205,6 +241,24 @@ function bindEvents() {
     input: document.getElementById("batch-code"),
     suggestions: getUniqueValues("batchCode"),
   });
+}
+
+function calculateQuantity() {
+  const productCode = document.getElementById("product-code").value.trim();
+
+  const casesPerLayer = getCasesPerLayer(productCode);
+
+  const completeLayers = Number(
+    document.getElementById("complete-layers").value || 0
+  );
+
+  const partialLayerCases = Number(
+    document.getElementById("partial-layer-cases").value || 0
+  );
+
+  const quantity = completeLayers * casesPerLayer + partialLayerCases;
+
+  document.getElementById("quantity").value = quantity;
 }
 
 function handleBarcodeInput(event) {

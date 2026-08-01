@@ -18,6 +18,10 @@ export function createInboundItem(values = {}, sequence = 1) {
 
     bbd: values.bbd ?? "",
 
+    completeLayers: Number(values.completeLayers ?? 0),
+
+    partialLayerCases: Number(values.partialLayerCases ?? 0),
+
     quantity: Number(values.quantity ?? 0),
 
     sequence,
