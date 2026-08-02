@@ -10,6 +10,7 @@ import { parseBarcode } from "../core/barcode/parserFactory.js";
 import { findByGTIN, registerProduct } from "../core/catalog/productCatalog.js";
 import { createProduct } from "../core/catalog/product.js";
 import { getCasesPerLayer } from "../core/catalog/product.js";
+import { BARCODE_TYPES } from "../core/barcode/barcodeTypes.js";
 
 let barcodeTimer = null;
 
@@ -244,6 +245,11 @@ function processBarcode(barcode) {
     parsed = parseBarcode(barcode);
   } catch (error) {
     console.error("Barcode parsing failed:", error);
+    return;
+  }
+
+  if (parsed.type === BARCODE_TYPES.UNKNOWN) {
+    console.warn("Unsupported barcode:", barcode);
     return;
   }
 
