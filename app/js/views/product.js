@@ -260,6 +260,9 @@ function processBarcode(barcode) {
 function fillKnownProduct(parsed, product) {
   document.getElementById("product-code").value = product.productCode ?? "";
 
+  document.getElementById("product-description").value =
+    product.description ?? "";
+
   document.getElementById("batch-code").value = parsed.batch ?? "";
 
   document.getElementById("bbd").value = parsed.bestBefore ?? "";
