@@ -134,8 +134,6 @@ function getProductTemplate() {
 				  id="complete-layers"
 				  name="completeLayers"
 				  min="0"
-				  value="0"
-				  required
 				>
 
 				<label for="partial-layer-cases">
@@ -147,8 +145,6 @@ function getProductTemplate() {
 				  id="partial-layer-cases"
 				  name="partialLayerCases"
 				  min="0"
-				  value="0"
-				  required
 				>
 
         <label for="quantity">
@@ -277,7 +273,7 @@ function fillKnownProduct(parsed, product) {
 
   lockBarcodeFields();
 
-  document.getElementById("quantity").focus();
+  document.getElementById("complete-layers").focus();
 }
 
 function lockBarcodeFields() {
@@ -327,6 +323,13 @@ function handleSubmit(event) {
   }
 
   const values = getFormValues(form);
+
+  const completeLayers = Number(values.completeLayers || 0);
+  const partialLayerCases = Number(values.partialLayerCases || 0);
+
+  if (completeLayers === 0 && partialLayerCases === 0) {
+    return;
+  }
 
   saveProduct(values);
 
