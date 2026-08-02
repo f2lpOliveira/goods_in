@@ -200,6 +200,38 @@ function bindEvents() {
   completeLayersInput.addEventListener("input", calculateQuantity);
 
   partialLayerCasesInput.addEventListener("input", calculateQuantity);
+
+  const descriptionInput = document.getElementById("product-description");
+
+  descriptionInput.addEventListener("keydown", event => {
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    event.preventDefault();
+
+    document.getElementById("complete-layers").focus();
+  });
+
+  completeLayersInput.addEventListener("keydown", event => {
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    event.preventDefault();
+
+    document.getElementById("partial-layer-cases").focus();
+  });
+
+  partialLayerCasesInput.addEventListener("keydown", event => {
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    event.preventDefault();
+
+    document.querySelector('#product-form button[type="submit"]').focus();
+  });
 }
 
 function calculateQuantity() {
