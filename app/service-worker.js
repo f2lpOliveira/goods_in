@@ -1,4 +1,4 @@
-const CACHE_NAME = "warehouse-inbound-v1";
+const CACHE_NAME = "warehouse-inbound-v2";
 
 const FILES_TO_CACHE = [
   "./",
@@ -39,6 +39,7 @@ const FILES_TO_CACHE = [
 
   "./js/state/currentInbound.js",
   "./js/state/inbounds.js",
+  "./js/state/navigationState.js",
 
   "./js/utils/dateUtils.js",
   "./js/utils/idUtils.js",
@@ -46,6 +47,7 @@ const FILES_TO_CACHE = [
   "./js/views/home.js",
   "./js/views/inbound.js",
   "./js/views/product.js",
+  "./js/views/history.js",
 ];
 
 self.addEventListener("install", event => {
