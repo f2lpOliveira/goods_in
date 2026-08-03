@@ -65,14 +65,13 @@ function renderInboundCard(inbound) {
     </p>
 
     <footer>
-      <button
-        class="export-button"
-        data-inbound-id="${inbound.inboundReferenceNumber}">
-
-        Export
-
-      </button>
-    </footer>
+  		<button
+    	type="button"
+    	class="export-button"
+    	data-inbound-id="${inbound.id}">
+    	Export
+  		</button>
+		</footer>
 
   </article>
 `;
@@ -85,9 +84,7 @@ function bindExportButtons(inbounds) {
     button.addEventListener("click", () => {
       const inboundId = button.dataset.inboundId;
 
-      const inbound = inbounds.find(
-        inbound => inbound.inboundReferenceNumber === inboundId
-      );
+      const inbound = inbounds.find(inbound => inbound.id === inboundId);
 
       const data = prepareInboundExport(inbound);
 
