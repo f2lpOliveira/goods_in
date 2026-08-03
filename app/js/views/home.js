@@ -5,7 +5,9 @@ import { generateCSV } from "../services/csvService.js";
 import { toDisplayDate } from "../utils/dateUtils.js";
 
 export function renderHome() {
-  const inbounds = getInbounds();
+  const inbounds = getInbounds().filter(
+    inbound => inbound.status === "completed"
+  );
 
   const appContent = document.getElementById("app-content");
 
