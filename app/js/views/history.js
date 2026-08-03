@@ -2,6 +2,8 @@ import { getInbounds } from "../state/inbounds.js";
 import { prepareInboundExport } from "../services/exportService.js";
 import { generateCSV } from "../services/csvService.js";
 import { toDisplayDate } from "../utils/dateUtils.js";
+import { navigate, ROUTES } from "../router.js";
+import { setLastRoute } from "../state/navigationState.js";
 
 export function renderHistory() {
   const inbounds = getInbounds().filter(
@@ -18,12 +20,17 @@ export function renderHistory() {
         <p>Archived inbound records</p>
       </header>
 
+			<button id="back-home-button">
+			  Back to Home
+			</button>
+
       ${renderHistoryList(inbounds)}
 
     </section>
   `;
 
   bindExportButtons(inbounds);
+  bindBackHomeButton();
 }
 
 function renderHistoryList(inbounds) {
@@ -85,5 +92,14 @@ function bindExportButtons(inbounds) {
 
       generateCSV(data, `Inbound_${inbound.inboundReferenceNumber}.csv`);
     });
+  });
+}
+
+function bindBackHomeButton() {
+  const backHomeButton = document.getElementById("back-home-button");
+
+  backHomeButton.addEventListener("click", () => {
+    setLastRoute(ROUTES.HOME);
+    navigate(ROUTES.HOME);
   });
 }
