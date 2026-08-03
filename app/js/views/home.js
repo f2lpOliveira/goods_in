@@ -1,5 +1,5 @@
 import { navigate, ROUTES } from "../router.js";
-import { getInbounds } from "../state/inbounds.js";
+import { getInbounds, moveInboundToHistory } from "../state/inbounds.js";
 import { prepareInboundExport } from "../services/exportService.js";
 import { generateCSV } from "../services/csvService.js";
 import { toDisplayDate } from "../utils/dateUtils.js";
@@ -35,6 +35,7 @@ export function renderHome() {
 `;
 
   bindExportButtons(inbounds);
+  bindHistoryButtons();
   bindNewInboundButton();
 }
 
@@ -73,6 +74,13 @@ function renderInboundCard(inbound) {
     	data-inbound-id="${inbound.id}">
     	Export
   		</button>
+
+			<button
+  		  type="button"
+  		  class="history-button"
+  		  data-inbound-id="${inbound.id}">
+  		  Move to History
+  		</button>
 		</footer>
 
   </article>
@@ -91,6 +99,33 @@ function bindExportButtons(inbounds) {
       const data = prepareInboundExport(inbound);
 
       generateCSV(data, `Inbound_${inbound.inboundReferenceNumber}.csv`);
+    });
+  });
+}
+
+function bindHistoryButtons() {
+  const historyButtons = document.querySelectorAll(".history-button");
+
+  historyButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const inboundId = button.dataset.inboundId;
+
+      const confirmed = confirm(
+        "Move this inbound to history?\n\nIt will remain available in Inbound History."
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const moved = moveInboundToHistory(inboundId);
+
+      if (!moved) {
+        console.error(`Inbound not found: ${inboundId}`);
+        return;
+      }
+
+      renderHome();
     });
   });
 }

@@ -12,6 +12,20 @@ export function addInbound(inbound) {
   saveInbounds(inbounds);
 }
 
+export function moveInboundToHistory(inboundId) {
+  const inbound = inbounds.find(inbound => inbound.id === inboundId);
+
+  if (!inbound) {
+    return false;
+  }
+
+  inbound.status = "history";
+
+  saveInbounds(inbounds);
+
+  return true;
+}
+
 export function clearInbounds() {
   inbounds = [];
 

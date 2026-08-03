@@ -223,6 +223,41 @@ input[type="date"][readonly] {
   cursor: pointer;
 }
 
+.inbound-card footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.inbound-card .history-button {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+
+  padding: 10px 16px;
+
+  border: 2px solid #555555;
+  border-radius: 4px;
+
+  background: #ffffff;
+  color: #111111;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  text-align: center;
+  cursor: pointer;
+}
+
+.inbound-card .history-button:hover {
+  background: #dddddd;
+}
+
+.inbound-card .history-button:active {
+  background: #cccccc;
+}
+
 .inbound-card .export-button:hover {
   background: #dddddd;
 }
