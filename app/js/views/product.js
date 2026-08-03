@@ -52,7 +52,7 @@ function getProductTemplate() {
 
       </div>
 
-      <form id="product-form">
+      <form id="product-form" novalidate>
 
 			<label for="barcode-input">
   				Barcode
@@ -75,6 +75,8 @@ function getProductTemplate() {
           type="text"
           id="product-code"
           name="productCode"
+					class="field-locked"
+  				tabindex="-1"
 					readonly
 					required>
 
@@ -86,6 +88,8 @@ function getProductTemplate() {
 				  type="text"
 				  id="product-description"
 				  name="description"
+					class="field-locked"
+  				tabindex="-1"
 					readonly
 					required>
 
@@ -110,6 +114,8 @@ function getProductTemplate() {
           type="text"
           id="batch-code"
           name="batchCode"
+					class="field-locked"
+  				tabindex="-1"
 					readonly
 					required>
 
@@ -121,8 +127,9 @@ function getProductTemplate() {
           type="date"
           id="bbd"
           name="bbd"
+					class="field-locked"
+  				tabindex="-1"
 					readonly
-					value="${inbound.lastBBD ?? ""}"
 				>
 
 				<label for="complete-layers">
@@ -309,21 +316,43 @@ function fillKnownProduct(parsed, product) {
 }
 
 function lockBarcodeFields() {
-  document.getElementById("barcode-input").readOnly = true;
+  const barcode = document.getElementById("barcode-input");
+  const batch = document.getElementById("batch-code");
+  const bbd = document.getElementById("bbd");
+  const productCode = document.getElementById("product-code");
+  const description = document.getElementById("product-description");
 
-  document.getElementById("batch-code").readOnly = true;
+  barcode.readOnly = true;
+  batch.readOnly = true;
+  bbd.readOnly = true;
+  productCode.readOnly = true;
+  description.readOnly = true;
 
-  document.getElementById("bbd").readOnly = true;
+  barcode.tabIndex = -1;
+  batch.tabIndex = -1;
+  bbd.tabIndex = -1;
+  productCode.tabIndex = -1;
+  description.tabIndex = -1;
 
-  document.getElementById("product-code").readOnly = true;
-
-  document.getElementById("product-description").readOnly = true;
+  barcode.classList.add("field-locked");
+  batch.classList.add("field-locked");
+  bbd.classList.add("field-locked");
+  productCode.classList.add("field-locked");
+  description.classList.add("field-locked");
 }
 
 function unlockNewProductFields() {
-  document.getElementById("product-code").readOnly = false;
+  const productCode = document.getElementById("product-code");
+  const description = document.getElementById("product-description");
 
-  document.getElementById("product-description").readOnly = false;
+  productCode.readOnly = false;
+  description.readOnly = false;
+
+  productCode.tabIndex = 0;
+  description.tabIndex = 0;
+
+  productCode.classList.remove("field-locked");
+  description.classList.remove("field-locked");
 }
 
 function prepareNewProduct(parsed) {
@@ -349,17 +378,26 @@ function handleSubmit(event) {
 
   const form = event.target;
 
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
-
   const values = getFormValues(form);
 
-  const completeLayers = Number(values.completeLayers || 0);
-  const partialLayerCases = Number(values.partialLayerCases || 0);
+  const validationError = validateProductValues(values);
 
-  if (completeLayers === 0 && partialLayerCases === 0) {
+  if (validationError) {
+    alert(validationError.message);
+
+    const field = document.getElementById(validationError.field);
+
+    if (field) {
+      field.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      setTimeout(() => {
+        field.focus();
+      }, 100);
+    }
+
     return;
   }
 
@@ -435,4 +473,60 @@ function handleFinishInbound() {
   clearCurrentInbound();
 
   navigate(ROUTES.HOME);
+}
+
+function validateProductValues(values) {
+  if (!values.gtin) {
+    return {
+      message: "Barcode is required.",
+      field: "barcode-input",
+    };
+  }
+
+  if (!values.productCode?.trim()) {
+    return {
+      message: "Product Code is required.",
+      field: "product-code",
+    };
+  }
+
+  if (!values.description?.trim()) {
+    return {
+      message: "Description is required.",
+      field: "product-description",
+    };
+  }
+
+  if (!values.batchCode?.trim()) {
+    return {
+      message: "Batch Code is required.",
+      field: "batch-code",
+    };
+  }
+
+  if (!values.bbd) {
+    return {
+      message: "BBD is required.",
+      field: "bbd",
+    };
+  }
+
+  const completeLayers = Number(values.completeLayers || 0);
+  const partialLayerCases = Number(values.partialLayerCases || 0);
+
+  if (completeLayers < 0 || partialLayerCases < 0) {
+    return {
+      message: "Layer quantities cannot be negative.",
+      field: "complete-layers",
+    };
+  }
+
+  if (completeLayers === 0 && partialLayerCases === 0) {
+    return {
+      message: "At least one layer or partial-layer case is required.",
+      field: "complete-layers",
+    };
+  }
+
+  return null;
 }

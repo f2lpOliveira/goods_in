@@ -119,6 +119,10 @@ input[readonly] {
   border-color: #999999;
 }
 
+input[type="date"][readonly] {
+  pointer-events: none;
+}
+
 .form-actions {
   display: flex;
   flex-direction: column;
@@ -197,4 +201,8 @@ input[readonly] {
 
 .home-view > button {
   margin-bottom: 20px;
+}
+
+.field-locked {
+  pointer-events: none;
 }
