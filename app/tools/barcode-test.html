@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Barcode Test</title>
+  </head>
+  <body>
+    <script type="module">
+      import {
+        saveProduct,
+        findByGTIN,
+        clearCatalog,
+      } from "../js/core/catalog/productCatalog.js";
+
+      import { createProduct } from "../js/core/catalog/product.js";
+
+      clearCatalog();
+
+      const product = createProduct({
+        gtin: "07630100807501",
+
+        productCode: "7090.50",
+      });
+
+      saveProduct(product);
+
+      console.log(findByGTIN("07630100807501"));
+    </script>
+  </body>
+</html>

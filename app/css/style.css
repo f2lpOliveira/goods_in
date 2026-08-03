@@ -1,60 +1,208 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
+
+html,
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #222;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
 }
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #eeeeee;
+  color: #111111;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
 .app-header {
-  background-color: #0d6efd;
-  color: white;
-  padding: 16px;
+  background: #ffffff;
+  border-bottom: 3px solid #777777;
+  padding: 18px 24px;
 }
-.home-view button {
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+#app-content {
+  padding: 24px;
+}
+
+.inbound-form-view,
+.product-view,
+.home-view {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+h2 {
+  margin: 0 0 24px;
+  font-size: 2rem;
+}
+
+form {
   width: 100%;
-
-  padding: 12px;
-
-  margin-bottom: 12px;
-
-  cursor: pointer;
 }
-.actions {
-  display: flex;
 
-  gap: 12px;
+.form-field {
+  margin-bottom: 20px;
+}
 
+form > label {
+  display: block;
   margin-top: 24px;
+  margin-bottom: 8px;
 }
-.record-form {
+
+.form-field label,
+form > label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+
+  min-height: 52px;
+  height: 52px;
+
+  padding: 10px 14px;
+
+  margin: 0;
+
+  background: #ffffff;
+  color: #111111;
+
+  border: 2px solid #777777;
+  border-radius: 4px;
+
+  font-size: 1.1rem;
+}
+
+form > input,
+form > select {
+  margin-bottom: 24px;
+}
+
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  min-width: 0;
+  overflow: hidden;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid #1464c4;
+  outline-offset: -2px;
+  border-color: #1464c4;
+}
+
+input[readonly] {
+  background: #e1e1e1;
+  color: #333333;
+  border-color: #999999;
+}
+
+input[type="date"][readonly] {
+  pointer-events: none;
+}
+
+.form-actions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-}
-.record-form input,
-.record-form select,
-.record-form button {
-  padding: 10px;
-  font-size: 1rem;
-}
-.autocomplete-list {
-  border: 1px solid #ccc;
+  gap: 14px;
 
-  max-height: 150px;
-
-  overflow-y: auto;
-
-  background: white;
+  margin-top: 28px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
 }
-.autocomplete-option {
-  padding: 8px;
+
+.form-actions::before,
+.form-actions::after {
+  display: none;
+  content: none;
+}
+
+.form-actions button,
+.home-view button {
+  width: 100%;
+  min-height: 54px;
+
+  padding: 10px 16px;
+
+  border: 2px solid #555555;
+  border-radius: 4px;
+
+  background: #ffffff;
+  color: #111111;
+
+  box-shadow: none;
+
+  font-size: 1.15rem;
+  font-weight: 700;
 
   cursor: pointer;
 }
-.autocomplete-option:hover {
-  background: #f2f2f2;
+
+.form-actions button:hover,
+.home-view button:hover {
+  background: #dddddd;
+}
+
+.form-actions button:active,
+.home-view button:active {
+  background: #cccccc;
+}
+
+.inbound-summary {
+  background: #ffffff;
+  border: 2px solid #999999;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+
+.inbound-summary p {
+  margin: 6px 0;
+  font-size: 1.05rem;
+}
+
+.inbound-card {
+  background: #ffffff;
+  border: 2px solid #999999;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.inbound-card h3 {
+  margin: 0 0 10px;
+}
+
+.inbound-card p {
+  margin: 6px 0;
+}
+
+.home-view > button {
+  margin-bottom: 20px;
+}
+
+.field-locked {
+  pointer-events: none;
 }

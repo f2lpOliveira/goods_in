@@ -27,45 +27,54 @@ function getInboundFormTemplate() {
 
       <form id="inbound-form">
 
-        <label for="arrival-date">
-          Arrival Date
-        </label>
+  <div class="form-field">
 
-        <input
-          type="date"
-          id="arrival-date"
-          name="arrivalDate"
-        >
+    <label for="arrival-date">
+      Arrival Date
+    </label>
 
-        <label for="inbound-reference-number">
-          Inbound Reference Number
-        </label>
+    <input
+      type="date"
+      id="arrival-date"
+      name="arrivalDate"
+      required
+    >
 
-        <input
-          type="text"
-          id="inbound-reference-number"
-          name="inboundReferenceNumber"
-        >
+  </div>
 
-        <div class="form-actions">
+  <div class="form-field">
 
-          <button
-  type="button"
-  id="create-inbound-button">
-  Create Inbound
-</button>
+    <label for="inbound-reference-number">
+      Inbound Reference Number
+    </label>
 
-          <button
-            type="button"
-            id="cancel-button">
+    <input
+      type="text"
+      id="inbound-reference-number"
+      name="inboundReferenceNumber"
+      autocomplete="off"
+      required
+    >
 
-            Cancel
+  </div>
 
-          </button>
+  <div class="form-actions">
 
-        </div>
+    <button
+      type="button"
+      id="create-inbound-button">
+      Create Inbound
+    </button>
 
-      </form>
+    <button
+      type="button"
+      id="cancel-button">
+      Cancel
+    </button>
+
+  </div>
+
+</form>
 
     </section>
   `;

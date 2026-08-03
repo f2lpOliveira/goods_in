@@ -4,6 +4,12 @@ export function createInboundItem(values = {}, sequence = 1) {
   return {
     id: generateId(),
 
+    gtin: values.gtin ?? "",
+
+    description: values.description ?? "",
+
+    productionDate: values.productionDate ?? "",
+
     productCode: values.productCode ?? "",
 
     mixedPallet: values.mixedPallet === "true",
@@ -11,6 +17,10 @@ export function createInboundItem(values = {}, sequence = 1) {
     batchCode: values.batchCode ?? "",
 
     bbd: values.bbd ?? "",
+
+    completeLayers: Number(values.completeLayers ?? 0),
+
+    partialLayerCases: Number(values.partialLayerCases ?? 0),
 
     quantity: Number(values.quantity ?? 0),
 
