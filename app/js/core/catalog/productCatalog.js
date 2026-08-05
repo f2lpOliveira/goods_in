@@ -14,22 +14,28 @@ export function findByGTIN(gtin) {
   return products.find(product => product.gtin === gtin) || null;
 }
 
-export function saveProduct(product) {
-  const products = loadProducts();
-
-  products.push(product);
-
-  saveProducts(products);
-}
-
 export function registerProduct(product) {
   const products = loadProducts();
 
+  const existingProduct = products.find(
+    existing => existing.gtin === product.gtin
+  );
+
+  if (existingProduct) {
+    return {
+      created: false,
+      product: existingProduct,
+    };
+  }
+
   products.push(product);
 
   saveProducts(products);
 
-  return product;
+  return {
+    created: true,
+    product,
+  };
 }
 
 export function clearCatalog() {
