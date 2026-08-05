@@ -1,5 +1,6 @@
 import { navigate, ROUTES } from "./router.js";
 import { getCurrentInbound } from "./state/currentInbound.js";
+import { getLastRoute } from "./state/navigationState.js";
 
 restoreApplicationState();
 
@@ -8,6 +9,13 @@ function restoreApplicationState() {
 
   if (currentInbound) {
     navigate(ROUTES.PRODUCT);
+    return;
+  }
+
+  const lastRoute = getLastRoute();
+
+  if (lastRoute === ROUTES.HISTORY) {
+    navigate(ROUTES.HISTORY);
     return;
   }
 
@@ -32,4 +40,8 @@ function registerServiceWorker() {
       console.error("Service Worker registration failed:", error);
     }
   });
+}
+
+export function saveLastRoute(route) {
+  localStorage.setItem(LAST_ROUTE_KEY, route);
 }

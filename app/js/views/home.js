@@ -1,11 +1,14 @@
 import { navigate, ROUTES } from "../router.js";
-import { getInbounds } from "../state/inbounds.js";
+import { getInbounds, moveInboundToHistory } from "../state/inbounds.js";
 import { prepareInboundExport } from "../services/exportService.js";
 import { generateCSV } from "../services/csvService.js";
 import { toDisplayDate } from "../utils/dateUtils.js";
+import { setLastRoute } from "../state/navigationState.js";
 
 export function renderHome() {
-  const inbounds = getInbounds();
+  const inbounds = getInbounds().filter(
+    inbound => inbound.status === "completed"
+  );
 
   const appContent = document.getElementById("app-content");
 
@@ -21,6 +24,10 @@ export function renderHome() {
       New Inbound
     </button>
 
+		<button id="history-button">
+		  Inbound History
+		</button>
+
     <hr />
 
     <section>
@@ -33,7 +40,9 @@ export function renderHome() {
 `;
 
   bindExportButtons(inbounds);
+  bindHistoryButtons();
   bindNewInboundButton();
+  bindHistoryNavigation();
 }
 
 function renderInboundList(inbounds) {
@@ -65,14 +74,20 @@ function renderInboundCard(inbound) {
     </p>
 
     <footer>
-      <button
-        class="export-button"
-        data-inbound-id="${inbound.inboundReferenceNumber}">
+  		<button
+    	type="button"
+    	class="export-button"
+    	data-inbound-id="${inbound.id}">
+    	Export
+  		</button>
 
-        Export
-
-      </button>
-    </footer>
+			<button
+  		  type="button"
+  		  class="history-button"
+  		  data-inbound-id="${inbound.id}">
+  		  Move to History
+  		</button>
+		</footer>
 
   </article>
 `;
@@ -85,13 +100,38 @@ function bindExportButtons(inbounds) {
     button.addEventListener("click", () => {
       const inboundId = button.dataset.inboundId;
 
-      const inbound = inbounds.find(
-        inbound => inbound.inboundReferenceNumber === inboundId
-      );
+      const inbound = inbounds.find(inbound => inbound.id === inboundId);
 
       const data = prepareInboundExport(inbound);
 
       generateCSV(data, `Inbound_${inbound.inboundReferenceNumber}.csv`);
+    });
+  });
+}
+
+function bindHistoryButtons() {
+  const historyButtons = document.querySelectorAll(".history-button");
+
+  historyButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const inboundId = button.dataset.inboundId;
+
+      const confirmed = confirm(
+        "Move this inbound to history?\n\nIt will remain available in Inbound History."
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const moved = moveInboundToHistory(inboundId);
+
+      if (!moved) {
+        console.error(`Inbound not found: ${inboundId}`);
+        return;
+      }
+
+      renderHome();
     });
   });
 }
@@ -101,5 +141,15 @@ function bindNewInboundButton() {
 
   newInboundButton.addEventListener("click", () => {
     navigate(ROUTES.INBOUND_FORM);
+  });
+}
+
+function bindHistoryNavigation() {
+  const historyButton = document.getElementById("history-button");
+
+  historyButton.addEventListener("click", () => {
+    setLastRoute(ROUTES.HISTORY);
+
+    navigate(ROUTES.HISTORY);
   });
 }

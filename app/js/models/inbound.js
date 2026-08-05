@@ -10,6 +10,8 @@ export function createInbound(values = {}) {
 
     inboundReferenceNumber: values.inboundReferenceNumber ?? "",
 
+    status: "completed",
+
     nextSequence: 1,
 
     items: [],
