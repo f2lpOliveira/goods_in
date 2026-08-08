@@ -38,6 +38,30 @@ export function registerProduct(product) {
   };
 }
 
+export function updateProduct(product) {
+  const products = loadProducts();
+
+  const index = products.findIndex(
+    existingProduct => existingProduct.gtin === product.gtin
+  );
+
+  if (index === -1) {
+    return null;
+  }
+
+  const updatedProduct = {
+    ...products[index],
+    ...product,
+    updatedAt: new Date().toISOString(),
+  };
+
+  products[index] = updatedProduct;
+
+  saveProducts(products);
+
+  return updatedProduct;
+}
+
 export function clearCatalog() {
   clearProducts();
 }

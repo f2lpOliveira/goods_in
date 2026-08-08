@@ -1,8 +1,9 @@
-export function createProduct({ gtin, productCode, description = "" }) {
+export function createProduct({ gtin, productCode, description, unitsPerBox }) {
   return {
     gtin,
     productCode,
     description,
+    unitsPerBox: Number(unitsPerBox),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

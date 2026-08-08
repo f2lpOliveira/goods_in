@@ -33,7 +33,7 @@ function bindEvents() {
   const registerButton = document.getElementById("register-product-button");
 
   registerButton.addEventListener("click", () => {
-    navigate(ROUTES.PRODUCT);
+    navigate(ROUTES.PRODUCT_REGISTRATION);
   });
 
   const backButton = document.getElementById("catalog-back-button");

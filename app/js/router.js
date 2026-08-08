@@ -3,6 +3,7 @@ import { renderInboundForm } from "./views/inbound.js";
 import { renderProductForm } from "./views/product.js";
 import { renderHistory } from "./views/history.js";
 import { renderCatalog } from "./views/catalog.js";
+import { renderProductRegistration } from "./views/productRegistration.js";
 
 export const ROUTES = {
   HOME: "home",
@@ -10,6 +11,7 @@ export const ROUTES = {
   PRODUCT: "product",
   HISTORY: "history",
   CATALOG: "catalog",
+  PRODUCT_REGISTRATION: "productRegistration",
 };
 
 const routes = {
@@ -18,6 +20,7 @@ const routes = {
   [ROUTES.PRODUCT]: renderProductForm,
   [ROUTES.HISTORY]: renderHistory,
   [ROUTES.CATALOG]: renderCatalog,
+  [ROUTES.PRODUCT_REGISTRATION]: renderProductRegistration,
 };
 
 export function navigate(route) {
