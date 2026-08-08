@@ -1,9 +1,14 @@
-export function createProduct({ gtin, productCode, description, unitsPerBox }) {
+export function createProduct({
+  gtin,
+  productCode,
+  description,
+  unitsPerBox = null,
+}) {
   return {
     gtin,
     productCode,
     description,
-    unitsPerBox: Number(unitsPerBox),
+    unitsPerBox: unitsPerBox === null ? null : Number(unitsPerBox),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
