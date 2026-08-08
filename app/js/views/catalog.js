@@ -1,4 +1,5 @@
 import { navigate, ROUTES } from "../router.js";
+import { exportProductCatalog } from "../services/productCatalogBackupService.js";
 
 export function renderCatalog() {
   const appContent = document.getElementById("app-content");
@@ -16,6 +17,10 @@ export function renderCatalog() {
         <button type="button" id="register-product-button">
           Register Product
         </button>
+
+				<button type="button" id="export-catalog-button">
+				  Export Catalogue
+				</button>
 
         <button type="button" id="catalog-back-button">
           Back
@@ -40,5 +45,11 @@ function bindEvents() {
 
   backButton.addEventListener("click", () => {
     navigate(ROUTES.HOME);
+  });
+
+  const exportButton = document.getElementById("export-catalog-button");
+
+  exportButton.addEventListener("click", () => {
+    exportProductCatalog();
   });
 }
