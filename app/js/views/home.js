@@ -24,6 +24,10 @@ export function renderHome() {
       New Inbound
     </button>
 
+		<button id="product-catalogue-button">
+		  Product Catalogue
+		</button>
+
 		<button id="history-button">
 		  Inbound History
 		</button>
@@ -43,6 +47,7 @@ export function renderHome() {
   bindHistoryButtons();
   bindNewInboundButton();
   bindHistoryNavigation();
+  bindProductCatalogueButton();
 }
 
 function renderInboundList(inbounds) {
@@ -151,5 +156,13 @@ function bindHistoryNavigation() {
     setLastRoute(ROUTES.HISTORY);
 
     navigate(ROUTES.HISTORY);
+  });
+}
+
+function bindProductCatalogueButton() {
+  const button = document.getElementById("product-catalogue-button");
+
+  button.addEventListener("click", () => {
+    navigate(ROUTES.CATALOG);
   });
 }
