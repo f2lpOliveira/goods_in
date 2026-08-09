@@ -1,5 +1,8 @@
 import { navigate, ROUTES } from "../router.js";
-import { exportProductCatalog } from "../services/productCatalogBackupService.js";
+import {
+  exportProductCatalog,
+  importProductCatalog,
+} from "../services/productCatalogBackupService.js";
 
 export function renderCatalog() {
   const appContent = document.getElementById("app-content");
@@ -21,6 +24,19 @@ export function renderCatalog() {
 				<button type="button" id="export-catalog-button">
 				  Export Catalogue
 				</button>
+				
+				<button
+				  type="button"
+				  id="import-catalog-button">
+				  Import Catalogue
+				</button>
+
+				<input
+				  type="file"
+				  id="import-catalog-input"
+				  accept=".json,application/json"
+				  class="file-input-hidden"
+				>
 
         <button type="button" id="catalog-back-button">
           Back
@@ -51,5 +67,37 @@ function bindEvents() {
 
   exportButton.addEventListener("click", () => {
     exportProductCatalog();
+  });
+
+  const importButton = document.getElementById("import-catalog-button");
+
+  const importInput = document.getElementById("import-catalog-input");
+
+  importButton.addEventListener("click", () => {
+    importInput.click();
+  });
+
+  importInput.addEventListener("change", async () => {
+    const file = importInput.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    try {
+      const products = await importProductCatalog(file);
+
+      console.log("Validated catalogue:", products);
+
+      alert(
+        `Catalogue validated successfully.\n\nProducts: ${products.length}`
+      );
+    } catch (error) {
+      console.error("Catalogue import failed:", error);
+
+      alert(error.message);
+    }
+
+    importInput.value = "";
   });
 }
