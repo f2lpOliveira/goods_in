@@ -4,6 +4,8 @@ import { findByGTIN, registerProduct } from "../core/catalog/productCatalog.js";
 import { createProduct } from "../core/catalog/product.js";
 import { BARCODE_TYPES } from "../core/barcode/barcodeTypes.js";
 
+let barcodeTimer = null;
+
 export function renderProductRegistration() {
   const appContent = document.getElementById("app-content");
 
@@ -32,48 +34,39 @@ export function renderProductRegistration() {
         >
 
         <label for="registration-product-code">
-          Product Code
-        </label>
+  				Product Code
+				</label>
 
-        <input
-          type="text"
-          id="registration-product-code"
-          name="productCode"
-          class="field-locked"
-          tabindex="-1"
-          readonly
-          required
-        >
+				<input
+				  type="text"
+				  id="registration-product-code"
+				  name="productCode"
+				  required
+				>
 
-        <label for="registration-description">
-          Description
-        </label>
+				<label for="registration-description">
+				  Description
+				</label>
 
-        <input
-          type="text"
-          id="registration-description"
-          name="description"
-          class="field-locked"
-          tabindex="-1"
-          readonly
-          required
-        >
+				<input
+				  type="text"
+				  id="registration-description"
+				  name="description"
+				  required
+				>
 
-        <label for="registration-units-per-box">
-          Units per Box
-        </label>
+				<label for="registration-units-per-box">
+				  Units per Box
+				</label>
 
-        <input
-          type="number"
-          id="registration-units-per-box"
-          name="unitsPerBox"
-          class="field-locked"
-          tabindex="-1"
-          readonly
-          min="1"
-          step="1"
-          required
-        >
+				<input
+				  type="number"
+				  id="registration-units-per-box"
+				  name="unitsPerBox"
+				  min="1"
+				  step="1"
+				  required
+				>
 
         <div class="form-actions">
 
@@ -94,9 +87,44 @@ export function renderProductRegistration() {
     </section>
   `;
 
-  bindEvents();
-
   lockProductFields();
+  bindEvents();
+}
+
+function lockProductFields() {
+  const productCode = document.getElementById("registration-product-code");
+  const description = document.getElementById("registration-description");
+  const unitsPerBox = document.getElementById("registration-units-per-box");
+
+  productCode.readOnly = true;
+  description.readOnly = true;
+  unitsPerBox.readOnly = true;
+
+  productCode.tabIndex = -1;
+  description.tabIndex = -1;
+  unitsPerBox.tabIndex = -1;
+
+  productCode.classList.add("field-locked");
+  description.classList.add("field-locked");
+  unitsPerBox.classList.add("field-locked");
+}
+
+function unlockProductFields() {
+  const productCode = document.getElementById("registration-product-code");
+  const description = document.getElementById("registration-description");
+  const unitsPerBox = document.getElementById("registration-units-per-box");
+
+  productCode.readOnly = false;
+  description.readOnly = false;
+  unitsPerBox.readOnly = false;
+
+  productCode.tabIndex = 0;
+  description.tabIndex = 0;
+  unitsPerBox.tabIndex = 0;
+
+  productCode.classList.remove("field-locked");
+  description.classList.remove("field-locked");
+  unitsPerBox.classList.remove("field-locked");
 }
 
 function bindEvents() {
@@ -106,15 +134,7 @@ function bindEvents() {
 
   const barcodeInput = document.getElementById("registration-barcode");
 
-  barcodeInput.addEventListener("keydown", event => {
-    if (event.key !== "Enter") {
-      return;
-    }
-
-    event.preventDefault();
-
-    processBarcode(barcodeInput.value.trim());
-  });
+  barcodeInput.addEventListener("input", handleBarcodeInput);
 
   const backButton = document.getElementById("registration-back-button");
 
@@ -184,42 +204,6 @@ function handleSubmit(event) {
   showSaveButton();
 
   barcodeInput.focus();
-}
-
-function lockProductFields() {
-  const productCode = document.getElementById("registration-product-code");
-  const description = document.getElementById("registration-description");
-  const unitsPerBox = document.getElementById("registration-units-per-box");
-
-  productCode.readOnly = true;
-  description.readOnly = true;
-  unitsPerBox.readOnly = true;
-
-  productCode.tabIndex = -1;
-  description.tabIndex = -1;
-  unitsPerBox.tabIndex = -1;
-
-  productCode.classList.add("field-locked");
-  description.classList.add("field-locked");
-  unitsPerBox.classList.add("field-locked");
-}
-
-function unlockProductFields() {
-  const productCode = document.getElementById("registration-product-code");
-  const description = document.getElementById("registration-description");
-  const unitsPerBox = document.getElementById("registration-units-per-box");
-
-  productCode.readOnly = false;
-  description.readOnly = false;
-  unitsPerBox.readOnly = false;
-
-  productCode.tabIndex = 0;
-  description.tabIndex = 0;
-  unitsPerBox.tabIndex = 0;
-
-  productCode.classList.remove("field-locked");
-  description.classList.remove("field-locked");
-  unitsPerBox.classList.remove("field-locked");
 }
 
 function fillExistingProduct(product) {
@@ -315,4 +299,18 @@ function showSaveButton() {
   if (saveButton) {
     saveButton.style.display = "";
   }
+}
+
+function handleBarcodeInput(event) {
+  const barcode = event.target.value.trim();
+
+  if (!barcode) {
+    return;
+  }
+
+  clearTimeout(barcodeTimer);
+
+  barcodeTimer = setTimeout(() => {
+    processBarcode(barcode);
+  }, 100);
 }
