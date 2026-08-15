@@ -41,7 +41,3 @@ function registerServiceWorker() {
     }
   });
 }
-
-export function saveLastRoute(route) {
-  localStorage.setItem(LAST_ROUTE_KEY, route);
-}
