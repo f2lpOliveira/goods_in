@@ -3,6 +3,7 @@ import {
   exportProductCatalog,
   importProductCatalog,
 } from "../services/productCatalogBackupService.js";
+import { upsertProducts } from "../core/catalog/productCatalog.js";
 
 export function renderCatalog() {
   const appContent = document.getElementById("app-content");
@@ -86,11 +87,15 @@ function bindEvents() {
 
     try {
       const products = await importProductCatalog(file);
+      const result = upsertProducts(products);
 
-      console.log("Validated catalogue:", products);
+      console.log("Imported catalogue result:", result);
 
       alert(
-        `Catalogue validated successfully.\n\nProducts: ${products.length}`
+        `Catalogue imported successfully!\n\n` +
+        `• Total in database: ${result.total}\n` +
+        `• New products added: ${result.createdCount}\n` +
+        `• Existing products updated: ${result.updatedCount}`
       );
     } catch (error) {
       console.error("Catalogue import failed:", error);
